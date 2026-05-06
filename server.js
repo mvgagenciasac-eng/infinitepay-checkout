@@ -11,11 +11,11 @@ app.get("/test-checkout", async (req, res) => {
     const payload = {
       handle: process.env.INFINITE_TAG,
       items: [
-        {
-          name: "Produto Teste",
-          quantity: 1,
-          amount: 1000
-        }
+   {
+  description: "Produto Teste",
+  quantity: 1,
+  price: 1000
+}
       ],
       redirect_url: process.env.SUCCESS_URL
     };
@@ -44,11 +44,11 @@ app.post("/create-checkout", async (req, res) => {
 
     const payload = {
       tag: process.env.INFINITE_TAG,
-      items: items.map(i => ({
-        name: i.title,
-        quantity: i.quantity,
-        amount: Math.round(i.price * 100)
-      })),
+     items: items.map(i => ({
+  description: i.title,
+  quantity: i.quantity,
+  price: Math.round(i.price * 100)
+})),
       redirect_url: process.env.SUCCESS_URL
     };
 

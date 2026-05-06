@@ -85,10 +85,6 @@ app.get("/", (req, res) => {
   res.status(200).send("InfinitePay Checkout API online");
 });
 
-app.get("/", (req, res) => {
-  res.status(200).send("InfinitePay Checkout API online");
-});
-
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, "0.0.0.0", () => {

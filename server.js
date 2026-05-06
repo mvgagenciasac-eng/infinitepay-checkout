@@ -92,7 +92,15 @@ app.post("/webhook", async (req, res) => {
 app.get("/", (req, res) => {
   res.status(200).send("InfinitePay Checkout API online");
 });
-
+// Shopify OAuth
+app.get("/auth/callback", async (req, res) => {
+  try {
+    res.send("App instalado com sucesso!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro na instalação do app");
+  }
+});
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, "0.0.0.0", () => {

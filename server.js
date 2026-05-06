@@ -50,6 +50,41 @@ app.post("/webhook", async (req, res) => {
   }
 });
 
+app.post("/create-checkout", async (req, res) => {
+  try {
+
+    const payload = {
+      tag: process.env.INFINITE_TAG,
+      items: [
+        {
+          name: "Produto Teste",
+          quantity: 1,
+          amount: 1000
+        }
+      ],
+      redirect_url: process.env.SUCCESS_URL
+    };
+
+    const response = await axios.post(
+      "https://api.infinitepay.io/v1/checkout/session",
+      payload
+    );
+
+    res.json(response.data);
+
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+
+    res.status(500).json({
+      error: error.response?.data || error.message
+    });
+  }
+});
+
+app.get("/", (req, res) => {
+  res.status(200).send("InfinitePay Checkout API online");
+});
+
 app.get("/", (req, res) => {
   res.status(200).send("InfinitePay Checkout API online");
 });

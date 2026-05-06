@@ -9,7 +9,7 @@ app.use(express.json());
 app.get("/test-checkout", async (req, res) => {
   try {
     const payload = {
-      tag: process.env.INFINITE_TAG,
+      handle: process.env.INFINITE_TAG,
       items: [
         {
           name: "Produto Teste",

@@ -5,7 +5,39 @@ const axios = require("axios");
 const app = express();
 app.use(express.json());
 
-// 🔹 Criar checkout InfinitePay
+// Teste no navegador
+app.get("/test-checkout", async (req, res) => {
+  try {
+    const payload = {
+      tag: process.env.INFINITE_TAG,
+      items: [
+        {
+          name: "Produto Teste",
+          quantity: 1,
+          amount: 1000
+        }
+      ],
+      redirect_url: process.env.SUCCESS_URL
+    };
+
+    const response = await axios.post(
+      "https://api.checkout.infinitepay.io/links",
+      payload
+    );
+
+    const checkoutUrl = response.data.url || response.data.checkout_url || response.data.link;
+
+    res.redirect(checkoutUrl);
+
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    res.status(500).json({
+      error: error.response?.data || error.message
+    });
+  }
+});
+
+// Criar checkout via Shopify
 app.post("/create-checkout", async (req, res) => {
   try {
     const { items } = req.body;
@@ -25,15 +57,19 @@ app.post("/create-checkout", async (req, res) => {
       payload
     );
 
-    res.json({ checkout_url: response.data.url });
+    const checkoutUrl = response.data.url || response.data.checkout_url || response.data.link;
+
+    res.json({ checkout_url: checkoutUrl });
 
   } catch (error) {
     console.error(error.response?.data || error.message);
-    res.status(500).send("Erro ao criar checkout");
+    res.status(500).json({
+      error: error.response?.data || error.message
+    });
   }
 });
 
-// 🔹 Webhook InfinitePay
+// Webhook InfinitePay
 app.post("/webhook", async (req, res) => {
   try {
     const event = req.body;
@@ -47,37 +83,6 @@ app.post("/webhook", async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.sendStatus(500);
-  }
-});
-
-app.post("/create-checkout", async (req, res) => {
-  try {
-
-    const payload = {
-      tag: process.env.INFINITE_TAG,
-      items: [
-        {
-          name: "Produto Teste",
-          quantity: 1,
-          amount: 1000
-        }
-      ],
-      redirect_url: process.env.SUCCESS_URL
-    };
-
-    const response = await axios.post(
-      "https://api.infinitepay.io/v1/checkout/session",
-      payload
-    );
-
-    res.json(response.data);
-
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-
-    res.status(500).json({
-      error: error.response?.data || error.message
-    });
   }
 });
 

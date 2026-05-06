@@ -51,11 +51,11 @@ app.post("/webhook", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("InfinitePay Checkout API online");
+  res.status(200).send("InfinitePay Checkout API online");
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

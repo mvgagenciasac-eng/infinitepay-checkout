@@ -45,15 +45,15 @@ app.post("/create-checkout", async (req, res) => {
   try {
     const { items } = req.body;
 
-    const payload = {
-      tag: process.env.INFINITE_TAG,
-     items: items.map(i => ({
-  description: i.title,
-  quantity: i.quantity,
-  price: Math.round(i.price * 100)
-})),
-      redirect_url: process.env.SUCCESS_URL
-    };
+const payload = {
+  handle: process.env.INFINITE_TAG,
+  items: items.map(i => ({
+    name: i.title,
+    quantity: i.quantity,
+    price: Number(i.price)
+  })),
+  redirect_url: process.env.SUCCESS_URL
+};
 
     const response = await axios.post(
       "https://api.checkout.infinitepay.io/links",

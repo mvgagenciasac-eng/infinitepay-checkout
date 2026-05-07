@@ -748,39 +748,61 @@ app.post("/checkout", async (req, res) => {
           </aside>
         </main>
 
-        <section class="benefits">
-          <div class="benefit">
-            <div class="benefit-icon">🔒</div>
-            <div>
-              <strong>Pagamento 100% Seguro</strong>
-              <span>Ambiente protegido</span>
-            </div>
-          </div>
+       <section class="reviews">
 
-          <div class="benefit">
-            <div class="benefit-icon">🛡️</div>
-            <div>
-              <strong>Privacidade Garantida</strong>
-              <span>Seus dados seguros</span>
-            </div>
-          </div>
+  <h2 class="reviews-title">
+    O que nossos clientes dizem
+  </h2>
 
-          <div class="benefit">
-            <div class="benefit-icon">🎧</div>
-            <div>
-              <strong>Suporte Especializado</strong>
-              <span>Atendimento rápido</span>
-            </div>
-          </div>
+  <div class="reviews-grid">
 
-          <div class="benefit">
-            <div class="benefit-icon">🏅</div>
-            <div>
-              <strong>Satisfação Garantida</strong>
-              <span>Compra segura</span>
-            </div>
-          </div>
-        </section>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+
+      <p>
+        “Produto chegou rápido e a qualidade superou minhas expectativas.”
+      </p>
+
+      <strong>Marcos Vinícius</strong>
+      <span>São Paulo - SP</span>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+
+      <p>
+        “Processo de compra muito simples e pagamento aprovado na hora.”
+      </p>
+
+      <strong>Felipe Andrade</strong>
+      <span>Rio de Janeiro - RJ</span>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+
+      <p>
+        “Atendimento excelente e produto exatamente como nas fotos.”
+      </p>
+
+      <strong>Lucas Martins</strong>
+      <span>Belo Horizonte - MG</span>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+
+      <p>
+        “Com certeza voltarei a comprar. Loja muito confiável.”
+      </p>
+
+      <strong>Renato Alves</strong>
+      <span>Curitiba - PR</span>
+    </div>
+
+  </div>
+
+</section>
 
         <footer class="footer">
           <div>

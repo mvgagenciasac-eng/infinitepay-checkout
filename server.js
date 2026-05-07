@@ -174,36 +174,34 @@ app.post("/checkout", async (req, res) => {
 
     let total = 0;
 
+    const formatMoney = (value) => {
+      return Number(value).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    };
+
     const itemsHtml = items.map((item) => {
       const price = Number(item.price);
       const quantity = Number(item.quantity);
+      const itemTotal = price * quantity;
 
-      total += price * quantity;
+      total += itemTotal;
 
       return `
-        <div style="display:flex;gap:15px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #eee;">
-          
-          <img 
-            src="${item.image}" 
-            style="width:90px;height:90px;object-fit:cover;border-radius:10px;"
-          />
+        <div class="order-item">
+          <div class="product-image-wrap">
+            <img src="${item.image}" class="product-image" />
+            <span class="qty-badge">${quantity}</span>
+          </div>
 
-          <div style="flex:1;">
-            <h3 style="margin:0;font-size:16px;">
-              ${item.title}
-            </h3>
+          <div class="product-info">
+            <strong>${item.title}</strong>
+            <span>${item.variant_title || "Padrão"}</span>
+          </div>
 
-            <p style="margin:5px 0;color:#666;">
-              Variante: ${item.variant_title || "Padrão"}
-            </p>
-
-            <p style="margin:5px 0;">
-              Quantidade: ${quantity}
-            </p>
-
-            <strong>
-              R$ ${(price * quantity).toFixed(2)}
-            </strong>
+          <div class="product-price">
+            ${formatMoney(itemTotal)}
           </div>
         </div>
       `;
@@ -215,96 +213,619 @@ app.post("/checkout", async (req, res) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
         <title>Checkout Forllini</title>
 
         <style>
-          body{
-            font-family:Arial;
-            background:#f5f5f5;
-            margin:0;
-            padding:20px;
+          * {
+            box-sizing: border-box;
           }
 
-          .container{
-            max-width:700px;
-            margin:auto;
-            background:white;
-            border-radius:20px;
-            padding:30px;
+          body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111;
+            background: #fff;
           }
 
-          .logo{
-            text-align:center;
-            margin-bottom:30px;
+          .header {
+            text-align: center;
+            padding: 32px 20px 28px;
+            border-bottom: 1px solid #e5e5e5;
           }
 
-          .total{
-            font-size:24px;
-            margin-top:20px;
+          .brand {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 64px;
+            letter-spacing: 6px;
+            line-height: 1;
+            font-weight: 400;
           }
 
-          .button{
-            width:100%;
-            height:55px;
-            border:none;
-            background:black;
-            color:white;
-            font-size:18px;
-            border-radius:12px;
-            cursor:pointer;
-            margin-top:30px;
+          .subtitle {
+            margin-top: 6px;
+            font-size: 15px;
+            letter-spacing: 3px;
           }
 
-          input{
-            width:100%;
-            height:50px;
-            margin-top:10px;
-            padding:10px;
-            border:1px solid #ddd;
-            border-radius:10px;
-            box-sizing:border-box;
+          .checkout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            min-height: 760px;
+          }
+
+          .left {
+            padding: 42px 44px;
+          }
+
+          .right {
+            background: #f7f7f7;
+            padding: 42px 44px;
+            border-left: 1px solid #e5e5e5;
+          }
+
+          .steps {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 34px;
+          }
+
+          .steps strong {
+            color: #111;
+          }
+
+          h2 {
+            font-size: 21px;
+            margin: 0 0 18px;
+          }
+
+          .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .login-text {
+            font-size: 14px;
+            color: #555;
+          }
+
+          .login-text a {
+            color: #1769e0;
+            text-decoration: none;
+          }
+
+          .field {
+            width: 100%;
+            height: 56px;
+            border: 1px solid #d9d9d9;
+            border-radius: 7px;
+            padding: 0 14px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+          }
+
+          .field:focus {
+            border-color: #111;
+          }
+
+          .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+          }
+
+          .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+          }
+
+          .checkbox-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            margin: 14px 0 32px;
+          }
+
+          .checkbox-line input {
+            width: 18px;
+            height: 18px;
+          }
+
+          .pay-button {
+            width: 100%;
+            height: 66px;
+            border: none;
+            background: #000;
+            color: white;
+            border-radius: 7px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 22px;
+            margin-top: 22px;
+          }
+
+          .pay-button:hover {
+            opacity: 0.9;
+          }
+
+          .button-divider {
+            width: 1px;
+            height: 30px;
+            background: rgba(255,255,255,0.35);
+          }
+
+          .lock {
+            font-size: 21px;
+          }
+
+          .infinitepay-mark {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 500;
+          }
+
+          .ip-circle {
+            width: 31px;
+            height: 31px;
+            border-radius: 50%;
+            border: 6px solid #16e000;
+            box-shadow: inset 0 -8px 0 #f2dd00;
+            background: #141225;
+          }
+
+          .secure-note {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            color: #777;
+            font-size: 14px;
+            margin-top: 20px;
+          }
+
+          .order-item {
+            display: grid;
+            grid-template-columns: 82px 1fr auto;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 26px;
+          }
+
+          .product-image-wrap {
+            position: relative;
+            width: 82px;
+            height: 82px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .product-image {
+            width: 74px;
+            height: 74px;
+            object-fit: cover;
+            border-radius: 6px;
+          }
+
+          .qty-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #666;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+          }
+
+          .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            font-size: 14px;
+            line-height: 1.35;
+          }
+
+          .product-info span {
+            color: #666;
+          }
+
+          .product-price {
+            font-weight: bold;
+            font-size: 15px;
+            white-space: nowrap;
+          }
+
+          .summary-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            font-size: 16px;
+          }
+
+          .summary-line.muted {
+            color: #666;
+          }
+
+          .total-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 26px 0 34px;
+            font-size: 26px;
+            font-weight: 800;
+          }
+
+          .divider {
+            border-top: 1px solid #ddd;
+            margin: 28px 0;
+          }
+
+          .trust-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin: 24px 0;
+          }
+
+          .trust-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+
+          .shield {
+            color: #10a53a;
+            font-size: 28px;
+          }
+
+          .trust-text strong {
+            display: block;
+            font-size: 15px;
+          }
+
+          .trust-text span {
+            color: #666;
+            font-size: 13px;
+          }
+
+          .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 14px;
+          }
+
+          .benefits {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+            padding: 34px 44px;
+            border-top: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
+          }
+
+          .benefit {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+          }
+
+          .benefit-icon {
+            font-size: 30px;
+          }
+
+          .benefit strong {
+            display: block;
+            font-size: 14px;
+          }
+
+          .benefit span {
+            font-size: 13px;
+            color: #555;
+          }
+
+          .footer {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 30px;
+            padding: 34px 44px;
+            background: #fafafa;
+          }
+
+          .footer h3 {
+            margin: 0 0 14px;
+            font-size: 18px;
+          }
+
+          .footer p,
+          .footer a {
+            display: block;
+            color: #444;
+            font-size: 14px;
+            line-height: 1.7;
+            text-decoration: none;
+            margin: 0;
+          }
+
+          .copyright {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 44px;
+            font-size: 13px;
+            color: #666;
+            border-top: 1px solid #e5e5e5;
+          }
+
+          @media (max-width: 900px) {
+            .brand {
+              font-size: 42px;
+            }
+
+            .checkout {
+              grid-template-columns: 1fr;
+            }
+
+            .right {
+              border-left: none;
+              border-top: 1px solid #e5e5e5;
+            }
+
+            .left,
+            .right {
+              padding: 28px 18px;
+            }
+
+            .grid-2 {
+              grid-template-columns: 1fr;
+            }
+
+            .benefits,
+            .footer {
+              grid-template-columns: 1fr;
+              padding: 28px 18px;
+            }
+
+            .copyright {
+              flex-direction: column;
+              gap: 12px;
+              padding: 20px 18px;
+              text-align: center;
+            }
+
+            .pay-button {
+              font-size: 17px;
+              gap: 12px;
+            }
+
+            .infinitepay-mark {
+              font-size: 20px;
+            }
           }
         </style>
       </head>
 
       <body>
+        <header class="header">
+          <div class="brand">FORLLINI</div>
+          <div class="subtitle">MODA MASCULINA</div>
+        </header>
 
-        <div class="container">
+        <main class="checkout">
+          <section class="left">
+            <div class="steps">
+              <span>Carrinho</span>
+              <span>›</span>
+              <strong>Informações</strong>
+              <span>›</span>
+              <span>Pagamento</span>
+            </div>
 
-          <div class="logo">
-            <h1>FORLLINI</h1>
+            <div class="section-title">
+              <h2>Contato</h2>
+              <div class="login-text">Já possui uma conta? <a href="/account/login">Entrar</a></div>
+            </div>
+
+            <div class="field-group">
+              <input class="field" placeholder="E-mail ou WhatsApp" />
+            </div>
+
+            <label class="checkbox-line">
+              <input type="checkbox" />
+              Quero receber novidades e ofertas exclusivas
+            </label>
+
+            <h2>Entrega</h2>
+
+            <div class="field-group">
+              <select class="field">
+                <option>Brasil</option>
+              </select>
+
+              <div class="grid-2">
+                <input class="field" placeholder="Nome completo" />
+                <input class="field" placeholder="CPF" />
+              </div>
+
+              <input class="field" placeholder="CEP" />
+              <input class="field" placeholder="Endereço" />
+
+              <div class="grid-2">
+                <input class="field" placeholder="Número" />
+                <input class="field" placeholder="Complemento (opcional)" />
+              </div>
+
+              <input class="field" placeholder="Bairro" />
+
+              <div class="grid-2">
+                <input class="field" placeholder="Cidade" />
+                <select class="field">
+                  <option>Estado</option>
+                  <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                  <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+                  <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                  <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                  <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                  <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                  <option>SP</option><option>SE</option><option>TO</option>
+                </select>
+              </div>
+            </div>
+
+            <label class="checkbox-line">
+              <input type="checkbox" />
+              Salvar minhas informações para a próxima compra
+            </label>
+
+            <button class="pay-button">
+              <span class="lock">🔒</span>
+              <span>Ir para o pagamento</span>
+              <span class="button-divider"></span>
+              <span class="infinitepay-mark">
+                <span class="ip-circle"></span>
+                infinitepay
+              </span>
+            </button>
+
+            <div class="secure-note">
+              🔒 Seus dados estão protegidos e o pagamento é 100% seguro.
+            </div>
+          </section>
+
+          <aside class="right">
+            ${itemsHtml}
+
+            <div class="divider"></div>
+
+            <div class="summary-line">
+              <span>Subtotal</span>
+              <strong>${formatMoney(total)}</strong>
+            </div>
+
+            <div class="summary-line muted">
+              <span>Frete ⓘ</span>
+              <span>Calculado na próxima etapa</span>
+            </div>
+
+            <div class="total-line">
+              <span>Total</span>
+              <span>${formatMoney(total)}</span>
+            </div>
+
+            <div class="trust-row">
+              <div class="trust-left">
+                <div class="shield">♢</div>
+                <div class="trust-text">
+                  <strong>Ambiente seguro</strong>
+                  <span>Seus dados e pagamento protegidos</span>
+                </div>
+              </div>
+
+              <div class="infinitepay-mark">
+                <span class="ip-circle"></span>
+                infinitepay
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="payment-info">
+              🔒 Pague com Pix, Cartão ou Boleto via InfinitePay
+            </div>
+          </aside>
+        </main>
+
+        <section class="benefits">
+          <div class="benefit">
+            <div class="benefit-icon">🔒</div>
+            <div>
+              <strong>Pagamento 100% Seguro</strong>
+              <span>Ambiente protegido</span>
+            </div>
           </div>
 
-          <h2>Seu pedido</h2>
-
-          ${itemsHtml}
-
-          <div class="total">
-            <strong>Total: R$ ${total.toFixed(2)}</strong>
+          <div class="benefit">
+            <div class="benefit-icon">🛡️</div>
+            <div>
+              <strong>Privacidade Garantida</strong>
+              <span>Seus dados seguros</span>
+            </div>
           </div>
 
-          <hr style="margin:30px 0;" />
+          <div class="benefit">
+            <div class="benefit-icon">🎧</div>
+            <div>
+              <strong>Suporte Especializado</strong>
+              <span>Atendimento rápido</span>
+            </div>
+          </div>
 
-          <h2>Dados para entrega</h2>
+          <div class="benefit">
+            <div class="benefit-icon">🏅</div>
+            <div>
+              <strong>Satisfação Garantida</strong>
+              <span>Compra segura</span>
+            </div>
+          </div>
+        </section>
 
-          <input placeholder="Nome completo" />
-          <input placeholder="E-mail" />
-          <input placeholder="WhatsApp" />
-          <input placeholder="CPF" />
-          <input placeholder="CEP" />
-          <input placeholder="Endereço" />
-          <input placeholder="Número" />
-          <input placeholder="Bairro" />
-          <input placeholder="Cidade" />
-          <input placeholder="Estado" />
+        <footer class="footer">
+          <div>
+            <h3>Loja Forllini</h3>
+            <p>✉️ sac@lojaforllini.com</p>
+            <p>📍 Avenida Dom Hélder Câmara 05200, Sal 423,<br>
+            20771-004 Rio de Janeiro RJ, Brasil</p>
+          </div>
 
-          <button class="button">
-            Ir para pagamento
-          </button>
+          <div>
+            <h3>Institucional</h3>
+            <a href="/pages/sobre-nos">Sobre nós</a>
+            <a href="/pages/politica-de-privacidade">Política de Privacidade</a>
+            <a href="/pages/trocas-e-devolucoes">Trocas e Devoluções</a>
+            <a href="/pages/termos-de-uso">Termos de Uso</a>
+          </div>
 
+          <div>
+            <h3>Atendimento</h3>
+            <a href="/pages/fale-conosco">Fale conosco</a>
+            <a href="/pages/perguntas-frequentes">Perguntas Frequentes</a>
+            <a href="/pages/politica-de-entrega">Política de Entrega</a>
+          </div>
+        </footer>
+
+        <div class="copyright">
+          <span>© 2024 Loja Forllini. Todos os direitos reservados.</span>
+
+          <span class="infinitepay-mark" style="font-size:18px;">
+            Pagamento seguro via
+            <span class="ip-circle" style="width:24px;height:24px;border-width:5px;"></span>
+            infinitepay
+          </span>
         </div>
-
       </body>
       </html>
     `);

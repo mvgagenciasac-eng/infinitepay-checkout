@@ -543,7 +543,7 @@ async function goToInfinitePay() {
       return;
     }
 
-    const response = await fetch("https://infinitepay-checkout-production.up.railway.app/api/create-payment", {
+    const response = await fetch(""https://checkout.lojaforllini.com/api/create-payment"", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

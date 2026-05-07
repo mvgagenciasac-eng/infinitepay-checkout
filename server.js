@@ -543,17 +543,21 @@ async function goToInfinitePay() {
       return;
     }
 
-    const response = await fetch(
-  "https://checkout.lojaforllini.com/api/create-payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        items: checkoutItems,
-        customer: customer
-      })
-    });
+const response = await fetch("https://checkout.lojaforllini.com/checkout", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    items: cart.items.map(item => ({
+      title: item.product_title,
+      variant_title: item.variant_title,
+      quantity: item.quantity,
+      price: item.final_price / 100,
+      image: item.image
+    }))
+  })
+});
 
     const data = await response.json();
 

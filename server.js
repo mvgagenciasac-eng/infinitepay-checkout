@@ -163,6 +163,157 @@ app.get("/auth/callback", async (req, res) => {
     `);
   }
 });
+// Checkout próprio
+app.post("/checkout", async (req, res) => {
+  try {
+    const { items } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).send("Carrinho vazio");
+    }
+
+    let total = 0;
+
+    const itemsHtml = items.map((item) => {
+      const price = Number(item.price);
+      const quantity = Number(item.quantity);
+
+      total += price * quantity;
+
+      return `
+        <div style="display:flex;gap:15px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #eee;">
+          
+          <img 
+            src="${item.image}" 
+            style="width:90px;height:90px;object-fit:cover;border-radius:10px;"
+          />
+
+          <div style="flex:1;">
+            <h3 style="margin:0;font-size:16px;">
+              ${item.title}
+            </h3>
+
+            <p style="margin:5px 0;color:#666;">
+              Variante: ${item.variant_title || "Padrão"}
+            </p>
+
+            <p style="margin:5px 0;">
+              Quantidade: ${quantity}
+            </p>
+
+            <strong>
+              R$ ${(price * quantity).toFixed(2)}
+            </strong>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <title>Checkout Forllini</title>
+
+        <style>
+          body{
+            font-family:Arial;
+            background:#f5f5f5;
+            margin:0;
+            padding:20px;
+          }
+
+          .container{
+            max-width:700px;
+            margin:auto;
+            background:white;
+            border-radius:20px;
+            padding:30px;
+          }
+
+          .logo{
+            text-align:center;
+            margin-bottom:30px;
+          }
+
+          .total{
+            font-size:24px;
+            margin-top:20px;
+          }
+
+          .button{
+            width:100%;
+            height:55px;
+            border:none;
+            background:black;
+            color:white;
+            font-size:18px;
+            border-radius:12px;
+            cursor:pointer;
+            margin-top:30px;
+          }
+
+          input{
+            width:100%;
+            height:50px;
+            margin-top:10px;
+            padding:10px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            box-sizing:border-box;
+          }
+        </style>
+      </head>
+
+      <body>
+
+        <div class="container">
+
+          <div class="logo">
+            <h1>FORLLINI</h1>
+          </div>
+
+          <h2>Seu pedido</h2>
+
+          ${itemsHtml}
+
+          <div class="total">
+            <strong>Total: R$ ${total.toFixed(2)}</strong>
+          </div>
+
+          <hr style="margin:30px 0;" />
+
+          <h2>Dados para entrega</h2>
+
+          <input placeholder="Nome completo" />
+          <input placeholder="E-mail" />
+          <input placeholder="WhatsApp" />
+          <input placeholder="CPF" />
+          <input placeholder="CEP" />
+          <input placeholder="Endereço" />
+          <input placeholder="Número" />
+          <input placeholder="Bairro" />
+          <input placeholder="Cidade" />
+          <input placeholder="Estado" />
+
+          <button class="button">
+            Ir para pagamento
+          </button>
+
+        </div>
+
+      </body>
+      </html>
+    `);
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Erro ao abrir checkout");
+  }
+});
 
 const PORT = process.env.PORT || 8080;
 

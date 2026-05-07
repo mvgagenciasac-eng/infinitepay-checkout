@@ -492,7 +492,44 @@ h2{font-size:18px;margin:0 0 14px}
 
 <script>
 const checkoutItems = ${JSON.stringify(safeItems)};
+async function buscarCEP(cep) {
 
+  cep = cep.replace(/\D/g, "");
+
+  if (cep.length !== 8) return;
+
+  try {
+
+    const response = await fetch(
+      `https://viacep.com.br/ws/${cep}/json/`
+    );
+
+    const data = await response.json();
+
+    if (data.erro) return;
+
+    document.getElementById("customer-address").value =
+      data.logradouro || "";
+
+    document.getElementById("customer-neighborhood").value =
+      data.bairro || "";
+
+    document.getElementById("customer-city").value =
+      data.localidade || "";
+
+    document.getElementById("customer-state").value =
+      data.uf || "";
+
+  } catch (error) {
+    console.error("Erro CEP:", error);
+  }
+}
+
+document
+  .getElementById("customer-cep")
+  .addEventListener("blur", (e) => {
+    buscarCEP(e.target.value);
+  });
 async function goToInfinitePay() {
   try {
     const customer = {

@@ -233,19 +233,20 @@ app.post("/checkout", async (req, res) => {
             border-bottom: 1px solid #e5e5e5;
           }
 
-          .brand {
-            font-family: Georgia, 'Times New Roman', serif;
-            font-size: 64px;
-            letter-spacing: 6px;
-            line-height: 1;
-            font-weight: 400;
-          }
+         .brand {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 42px;
+  letter-spacing: 4px;
+  line-height: 1;
+  font-weight: 400;
+}
 
           .subtitle {
-            margin-top: 6px;
-            font-size: 15px;
-            letter-spacing: 3px;
-          }
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #666;
+}
 
           .checkout {
             display: grid;
@@ -298,15 +299,15 @@ app.post("/checkout", async (req, res) => {
           }
 
           .field {
-            width: 100%;
-            height: 56px;
-            border: 1px solid #d9d9d9;
-            border-radius: 7px;
-            padding: 0 14px;
-            font-size: 15px;
-            outline: none;
-            background: white;
-          }
+  width: 100%;
+  height: 46px;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+  background: white;
+}
 
           .field:focus {
             border-color: #111;
@@ -339,21 +340,21 @@ app.post("/checkout", async (req, res) => {
           }
 
           .pay-button {
-            width: 100%;
-            height: 66px;
-            border: none;
-            background: #000;
-            color: white;
-            border-radius: 7px;
-            font-size: 20px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 22px;
-            margin-top: 22px;
-          }
+  width: 100%;
+  height: 52px;
+  border: none;
+  background: #000;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 18px;
+}
 
           .pay-button:hover {
             opacity: 0.9;
@@ -365,26 +366,28 @@ app.post("/checkout", async (req, res) => {
             background: rgba(255,255,255,0.35);
           }
 
-          .lock {
-            font-size: 21px;
-          }
+          h2 {
+  font-size: 18px;
+  margin: 0 0 14px;
+}
 
-          .infinitepay-mark {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 24px;
-            font-weight: 500;
-          }
+         .infinitepay-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: Arial, sans-serif;
+}
 
           .ip-circle {
-            width: 31px;
-            height: 31px;
-            border-radius: 50%;
-            border: 6px solid #16e000;
-            box-shadow: inset 0 -8px 0 #f2dd00;
-            background: #141225;
-          }
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 4px solid #19e000;
+  box-shadow: inset 0 -4px 0 #e9d600;
+  background: #151327;
+}
 
           .secure-note {
             display: flex;
@@ -802,16 +805,30 @@ app.post("/checkout", async (req, res) => {
           </div>
 
           <div>
-            <h3>Institucional</h3>
-            <a href="/pages/sobre-nos">Sobre nós</a>
-            <a href="/pages/politica-de-privacidade">Política de Privacidade</a>
-            <a href="/pages/trocas-e-devolucoes">Trocas e Devoluções</a>
-            <a href="/pages/termos-de-uso">Termos de Uso</a>
-          </div>
+  <h3>Institucional</h3>
+
+  <a href="https://lojaforllini.com/policies/privacy-policy">
+    Política de Privacidade
+  </a>
+
+  <a href="https://lojaforllini.com/policies/refund-policy">
+    Política de Devolução
+  </a>
+
+  <a href="https://lojaforllini.com/policies/shipping-policy">
+    Política de Frete
+  </a>
+
+  <a href="https://lojaforllini.com/policies/terms-of-service">
+    Termos de Serviço
+  </a>
+</div>
 
           <div>
             <h3>Atendimento</h3>
-            <a href="/pages/fale-conosco">Fale conosco</a>
+            <a href="https://lojaforllini.com/pages/contact">
+  Fale conosco
+</a>
             <a href="/pages/perguntas-frequentes">Perguntas Frequentes</a>
             <a href="/pages/politica-de-entrega">Política de Entrega</a>
           </div>

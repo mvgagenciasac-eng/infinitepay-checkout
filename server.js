@@ -837,13 +837,11 @@ app.post("/checkout", async (req, res) => {
               <strong>${formatMoney(total)}</strong>
             </div>
 
-            <div class="summary-line muted">
-              <span>Frete Grátis <svg role="presentation" fill="none" focusable="false" stroke-width="1" width="24" height="24" class="icon icon-picto-truck" viewBox="0 0 24 24">
-        <path d="M19 17.798h1.868a1.714 1.714 0 0 0 1.715-1.715V11.25a3.274 3.274 0 0 0-3.275-3.274H14.395l-.097 7.869" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path d="M8.71 18.175c1.565 0 3.094-.16 4.572-.321m-9.94-.087a1.78 1.78 0 0 1-1.576-1.56c-.189-1.594-.407-3.256-.407-4.96 0-1.705.216-3.366.405-4.96a1.783 1.783 0 0 1 1.577-1.56c1.725-.186 3.523-.409 5.37-.409s3.644.223 5.368.408a1.783 1.783 0 0 1 1.578 1.56c.066.564.136 1.135.199 1.714" stroke="currentColor"></path>
-        <path d="M16.061 21.069a2.894 2.894 0 1 1 0-5.793 2.894 2.894 0 0 1 0 5.794v-.001ZM5.832 21.069a2.894 2.894 0 1 1 0-5.792 2.894 2.894 0 0 1 0 5.793v-.001Z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-      </svg>
-              <span>8 à 12 Dias úteis</span>
+              <div class="summary-line muted">
+  <span>Frete Grátis 🚚</span>
+  <span>8 à 12 Dias úteis</span>
+</div>
+              <span>8 a 12 Dias úteis</span>
             </div>
 
             <div class="total-line">
@@ -853,11 +851,7 @@ app.post("/checkout", async (req, res) => {
 
             <div class="trust-row">
               <div class="trust-left">
-                <div class="shield"><svg role="presentation" fill="none" focusable="false" stroke-width="1" width="24" height="24" class="sm:hidden icon icon-picto-lock" viewBox="0 0 24 24">
-        <path d="M3.236 18.182a5.071 5.071 0 0 0 4.831 4.465 114.098 114.098 0 0 0 7.865-.001 5.07 5.07 0 0 0 4.831-4.464 23.03 23.03 0 0 0 .165-2.611c0-.881-.067-1.752-.165-2.61a5.07 5.07 0 0 0-4.83-4.465c-1.311-.046-2.622-.07-3.933-.069a109.9 109.9 0 0 0-3.933.069 5.07 5.07 0 0 0-4.83 4.466 23.158 23.158 0 0 0-.165 2.609c0 .883.067 1.754.164 2.61Z" fill="currentColor" fill-opacity=".12" stroke="currentColor"></path>
-        <path d="M17 8.43V6.285A5 5 0 0 0 7 6.286V8.43" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path d="M12 17.714a2.143 2.143 0 1 0 0-4.286 2.143 2.143 0 0 0 0 4.286Z" stroke="currentColor"></path>
-      </svg></div>
+              <div class="shield">🔒</div>
                 <div class="trust-text">
                   <strong>Ambiente seguro</strong>
                  </div>

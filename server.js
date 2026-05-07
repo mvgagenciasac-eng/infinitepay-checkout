@@ -163,6 +163,65 @@ app.get("/auth/callback", async (req, res) => {
     `);
   }
 });
+// Criar pagamento InfinitePay a partir do checkout próprio
+app.post("/api/create-payment", async (req, res) => {
+
+  try {
+
+    const { items, customer } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({
+        error: "Carrinho vazio"
+      });
+    }
+
+    const orderNsu = `FORLLINI-${Date.now()}`;
+
+    const payload = {
+      handle: process.env.INFINITE_TAG,
+
+      order_nsu: orderNsu,
+
+      items: items.map((i) => ({
+        description: `${i.title}${i.variant_title ? " - " + i.variant_title : ""}`,
+        quantity: Number(i.quantity),
+        price: Math.round(Number(i.price) * 100)
+      })),
+
+      customer: {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+        document: customer.cpf
+      },
+
+      redirect_url: process.env.SUCCESS_URL
+    };
+
+    const response = await axios.post(
+      "https://api.checkout.infinitepay.io/links",
+      payload
+    );
+
+    const checkoutUrl =
+      response.data.url ||
+      response.data.checkout_url ||
+      response.data.link;
+
+    res.json({
+      checkout_url: checkoutUrl
+    });
+
+  } catch (error) {
+
+    console.error(error.response?.data || error.message);
+
+    res.status(500).json({
+      error: error.response?.data || error.message
+    });
+  }
+});
 // Checkout próprio
 app.post("/checkout", async (req, res) => {
   try {
@@ -950,210 +1009,7 @@ app.post("/checkout", async (req, res) => {
             </div>
 </div>
         </div>
-// Criar pagamento InfinitePay a partir do checkout próprio
-app.post("/api/create-payment", async (req, res) => {
-  try {
-    const { items, customer } = req.body;
 
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ error: "Carrinho vazio" });
-    }
-
-    if (!customer?.email || !customer?.phone || !customer?.name || !customer?.cpf) {
-      return res.status(400).json({
-        error: "Dados obrigatórios ausentes: nome, e-mail, telefone ou CPF"
-      });
-    }
-
-    const orderNsu = `FORLLINI-${Date.now()}`;
-
-    const payload = {
-      handle: process.env.INFINITE_TAG,
-
-      order_nsu: orderNsu,
-
-      items: items.map((i) => ({
-        description: `${i.title}${i.variant_title ? " - " + i.variant_title : ""}`,
-        quantity: Number(i.quantity),
-        price: Math.round(Number(i.price) * 100)
-      })),
-
-      customer: {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        document: customer.cpf,
-        cpf: customer.cpf,
-        address: {
-          zipcode: customer.cep,
-          street: customer.address,
-          number: customer.number,
-          complement: customer.complement,
-          neighborhood: customer.neighborhood,
-          city: customer.city,
-          state: customer.state,
-          country: "BR"
-        }
-      },
-
-      payer: {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        document: customer.cpf
-      },
-
-      buyer: {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        document: customer.cpf
-      },
-
-      redirect_url: process.env.SUCCESS_URL
-    };
-
-    console.log("Order NSU:", orderNsu);
-    console.log("Cliente checkout:", customer);
-    console.log("Payload InfinitePay:", payload);
-
-    const response = await axios.post(
-      "https://api.checkout.infinitepay.io/links",
-      payload
-    );
-
-    const checkoutUrl =
-      response.data.url || response.data.checkout_url || response.data.link;
-
-    res.json({
-      checkout_url: checkoutUrl,
-      order_nsu: orderNsu
-    });
-
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-
-    res.status(500).json({
-      error: error.response?.data || error.message
-    });
-  }
-});
-<script>
-
-const checkoutItems = ${JSON.stringify(items)};
-
-async function goToInfinitePay() {
-
-  try {
-
-    const customer = {
-      email: document.getElementById("customer-email")?.value || "",
-      phone: document.getElementById("customer-phone")?.value || "",
-      name: document.getElementById("customer-name")?.value || "",
-      cpf: document.getElementById("customer-cpf")?.value || "",
-      cep: document.getElementById("customer-cep")?.value || "",
-      address: document.getElementById("customer-address")?.value || "",
-      number: document.getElementById("customer-number")?.value || "",
-      complement: document.getElementById("customer-complement")?.value || "",
-      neighborhood: document.getElementById("customer-neighborhood")?.value || "",
-      city: document.getElementById("customer-city")?.value || "",
-      state: document.getElementById("customer-state")?.value || ""
-    };
-
-    if (!customer.email || !customer.phone || !customer.name || !customer.cpf) {
-
-      alert("Preencha nome, e-mail, telefone e CPF.");
-
-      return;
-    }
-
-    const response = await fetch(
-      "https://infinitepay-checkout-production.up.railway.app/api/create-payment",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          items: checkoutItems,
-          customer
-        })
-      }
-    );
-
-    const data = await response.json();
-
-    if (!data.checkout_url) {
-
-      console.error(data);
-
-      alert("Erro ao criar pagamento.");
-
-      return;
-    }
-
-    window.location.href = data.checkout_url;
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert("Erro ao ir para pagamento.");
-
-  }
-
-}
-
-</script>
-      </body>
-      </html>
-    `);
-
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Erro ao abrir checkout");
-  }
-});
-
-// Criar pagamento InfinitePay a partir do checkout próprio
-app.post("/api/create-payment", async (req, res) => {
-  try {
-    const { items, customer } = req.body;
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ error: "Carrinho vazio" });
-    }
-
-    const payload = {
-      handle: process.env.INFINITE_TAG,
-      items: items.map((i) => ({
-        description: `${i.title}${i.variant_title ? " - " + i.variant_title : ""}`,
-        quantity: Number(i.quantity),
-        price: Math.round(Number(i.price) * 100)
-      })),
-      redirect_url: process.env.SUCCESS_URL
-    };
-
-    console.log("Cliente checkout:", customer);
-    console.log("Payload InfinitePay:", payload);
-
-    const response = await axios.post(
-      "https://api.checkout.infinitepay.io/links",
-      payload
-    );
-
-    const checkoutUrl =
-      response.data.url || response.data.checkout_url || response.data.link;
-
-    res.json({ checkout_url: checkoutUrl });
-
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-    res.status(500).json({
-      error: error.response?.data || error.message
-    });
-  }
-});
 
 const PORT = process.env.PORT || 8080;
 

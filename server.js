@@ -748,7 +748,43 @@ app.post("/checkout", async (req, res) => {
           </aside>
         </main>
 
-       <section class="reviews">
+      <section class="benefits">
+
+  <div class="benefit">
+    <div class="benefit-icon">🔒</div>
+    <div>
+      <strong>Pagamento 100% Seguro</strong>
+      <span>Ambiente protegido</span>
+    </div>
+  </div>
+
+  <div class="benefit">
+    <div class="benefit-icon">🛡️</div>
+    <div>
+      <strong>Privacidade Garantida</strong>
+      <span>Seus dados seguros</span>
+    </div>
+  </div>
+
+  <div class="benefit">
+    <div class="benefit-icon">🎧</div>
+    <div>
+      <strong>Suporte Especializado</strong>
+      <span>Atendimento rápido</span>
+    </div>
+  </div>
+
+  <div class="benefit">
+    <div class="benefit-icon">🏅</div>
+    <div>
+      <strong>Satisfação Garantida</strong>
+      <span>Compra segura</span>
+    </div>
+  </div>
+
+</section>
+
+<section class="reviews">
 
   <h2 class="reviews-title">
     O que nossos clientes dizem

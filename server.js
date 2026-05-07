@@ -707,7 +707,8 @@ app.post("/checkout", async (req, res) => {
             </div>
 
             <div class="field-group">
-              <input class="field" placeholder="E-mail ou WhatsApp" />
+<input class="field" id="customer-email" placeholder="E-mail" />
+<input class="field" id="customer-phone" placeholder="WhatsApp / Telefone" />
             </div>
 
             <label class="checkbox-line">
@@ -723,23 +724,23 @@ app.post("/checkout", async (req, res) => {
               </select>
 
               <div class="grid-2">
-                <input class="field" placeholder="Nome completo" />
-                <input class="field" placeholder="CPF" />
+                <input class="field" id="customer-name" placeholder="Nome completo" />
+                <input class="field" id="customer-cpf" placeholder="CPF" />
               </div>
 
-              <input class="field" placeholder="CEP" />
-              <input class="field" placeholder="Endereço" />
+              <input class="field" id="customer-cep" placeholder="CEP" />
+              <input class="field" id="customer-address" placeholder="Endereço" />
 
               <div class="grid-2">
-                <input class="field" placeholder="Número" />
-                <input class="field" placeholder="Complemento (opcional)" />
+                <input class="field" id="customer-number" placeholder="Número" />
+                <input class="field" id="customer-complement" placeholder="Complemento (opcional)" />
               </div>
 
-              <input class="field" placeholder="Bairro" />
+              <input class="field" id="customer-neighborhood" placeholder="Bairro" />
 
               <div class="grid-2">
-                <input class="field" placeholder="Cidade" />
-                <select class="field">
+                <input class="field" id="customer-city" placeholder="Cidade" />
+                <select class="field" id="customer-state">
                   <option>Estado</option>
                   <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
                   <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
@@ -949,56 +950,94 @@ app.post("/checkout", async (req, res) => {
             </div>
 </div>
         </div>
-        <script>
-  const checkoutItems = ${JSON.stringify(items)};
+// Criar pagamento InfinitePay a partir do checkout próprio
+app.post("/api/create-payment", async (req, res) => {
+  try {
+    const { items, customer } = req.body;
 
-  async function goToInfinitePay() {
-    try {
-      const customer = {
-        contact: document.querySelector('input[placeholder="E-mail ou WhatsApp"]')?.value || "",
-        name: document.querySelector('input[placeholder="Nome completo"]')?.value || "",
-        cpf: document.querySelector('input[placeholder="CPF"]')?.value || "",
-        cep: document.querySelector('input[placeholder="CEP"]')?.value || "",
-        address: document.querySelector('input[placeholder="Endereço"]')?.value || "",
-        number: document.querySelector('input[placeholder="Número"]')?.value || "",
-        complement: document.querySelector('input[placeholder="Complemento (opcional)"]')?.value || "",
-        neighborhood: document.querySelector('input[placeholder="Bairro"]')?.value || "",
-        city: document.querySelector('input[placeholder="Cidade"]')?.value || "",
-        state: document.querySelector('select.field:last-of-type')?.value || ""
-      };
-
-      if (!customer.contact || !customer.name || !customer.cpf) {
-        alert("Preencha nome, e-mail/WhatsApp e CPF para continuar.");
-        return;
-      }
-
-      const response = await fetch("https://infinitepay-checkout-production.up.railway.app/api/create-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          items: checkoutItems,
-          customer
-        })
-      });
-
-      const data = await response.json();
-
-      if (!data.checkout_url) {
-        alert("Erro ao criar pagamento. Tente novamente.");
-        console.error(data);
-        return;
-      }
-
-      window.location.href = data.checkout_url;
-
-    } catch (error) {
-      console.error(error);
-      alert("Erro ao ir para pagamento.");
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Carrinho vazio" });
     }
+
+    if (!customer?.email || !customer?.phone || !customer?.name || !customer?.cpf) {
+      return res.status(400).json({
+        error: "Dados obrigatórios ausentes: nome, e-mail, telefone ou CPF"
+      });
+    }
+
+    const orderNsu = `FORLLINI-${Date.now()}`;
+
+    const payload = {
+      handle: process.env.INFINITE_TAG,
+
+      order_nsu: orderNsu,
+
+      items: items.map((i) => ({
+        description: `${i.title}${i.variant_title ? " - " + i.variant_title : ""}`,
+        quantity: Number(i.quantity),
+        price: Math.round(Number(i.price) * 100)
+      })),
+
+      customer: {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+        document: customer.cpf,
+        cpf: customer.cpf,
+        address: {
+          zipcode: customer.cep,
+          street: customer.address,
+          number: customer.number,
+          complement: customer.complement,
+          neighborhood: customer.neighborhood,
+          city: customer.city,
+          state: customer.state,
+          country: "BR"
+        }
+      },
+
+      payer: {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+        document: customer.cpf
+      },
+
+      buyer: {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+        document: customer.cpf
+      },
+
+      redirect_url: process.env.SUCCESS_URL
+    };
+
+    console.log("Order NSU:", orderNsu);
+    console.log("Cliente checkout:", customer);
+    console.log("Payload InfinitePay:", payload);
+
+    const response = await axios.post(
+      "https://api.checkout.infinitepay.io/links",
+      payload
+    );
+
+    const checkoutUrl =
+      response.data.url || response.data.checkout_url || response.data.link;
+
+    res.json({
+      checkout_url: checkoutUrl,
+      order_nsu: orderNsu
+    });
+
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+
+    res.status(500).json({
+      error: error.response?.data || error.message
+    });
   }
-</script>
+});
       </body>
       </html>
     `);

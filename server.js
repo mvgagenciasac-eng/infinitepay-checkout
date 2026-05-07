@@ -620,6 +620,68 @@ app.post("/checkout", async (req, res) => {
 
         <img loading="eager" src="https://cdn.prod.website-files.com/65c1399ac999a342139b5069/65c1399ac999a342139b5434_logo_brlc_preto.svg" alt="Logo InfinitePay" class="img-logo_infinitepay w-variant-c74a8267-4291-3686-2047-6a4b3b9bb8fa is-responsive">
           }
+          .reviews {
+  padding: 50px 44px;
+  background: #fff;
+}
+
+.reviews-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 36px;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.review-card {
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.review-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+  margin: 14px 0 18px;
+}
+
+.review-card strong {
+  display: block;
+  font-size: 14px;
+}
+
+.review-card span {
+  font-size: 13px;
+  color: #777;
+}
+
+.stars {
+  color: #ffb400;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 900px) {
+
+  .reviews {
+    padding: 40px 18px;
+  }
+
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reviews-title {
+    font-size: 24px;
+  }
+
+}
         </style>
       </head>
 
@@ -780,6 +842,62 @@ app.post("/checkout", async (req, res) => {
       <strong>Satisfação Garantida</strong>
       <span>Compra segura</span>
     </div>
+  </div>
+
+</section>
+
+<section class="reviews">
+
+  <h2 class="reviews-title">
+    O que nossos clientes dizem
+  </h2>
+
+  <div class="reviews-grid">
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+
+      <p>
+        “Produto chegou rápido e a qualidade superou minhas expectativas.”
+      </p>
+
+      <strong>Marcos Vinícius</strong>
+      <span>São Paulo - SP</span>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+
+      <p>
+        “Processo de compra muito simples e pagamento aprovado na hora.”
+      </p>
+
+      <strong>Felipe Andrade</strong>
+      <span>Rio de Janeiro - RJ</span>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+
+      <p>
+        “Atendimento excelente e produto exatamente como nas fotos.”
+      </p>
+
+      <strong>Lucas Martins</strong>
+      <span>Belo Horizonte - MG</span>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+
+      <p>
+        “Com certeza voltarei a comprar. Loja muito confiável.”
+      </p>
+
+      <strong>Renato Alves</strong>
+      <span>Curitiba - PR</span>
+    </div>
+
   </div>
 
 </section>

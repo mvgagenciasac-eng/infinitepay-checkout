@@ -698,12 +698,11 @@ app.post("/checkout", async (req, res) => {
             <button class="pay-button">
               <span class="lock"></span>
               <span>Ir para o pagamento</span>
-              <span class="button-divider"></span>
-              
+                       
             </button>
 
             <div class="secure-note">
-            Seus dados estão protegidos <img loading="eager" src="https://cdn.prod.website-files.com/65c1399ac999a342139b5069/65c1399ac999a342139b5434_logo_brlc_preto.svg" alt="Logo InfinitePay" class="img-logo_infinitepay w-variant-c74a8267-4291-3686-2047-6a4b3b9bb8fa is-responsive">
+            <img loading="eager" src="https://cdn.prod.website-files.com/65c1399ac999a342139b5069/65c1399ac999a342139b5434_logo_brlc_preto.svg" alt="Logo InfinitePay" class="img-logo_infinitepay w-variant-c74a8267-4291-3686-2047-6a4b3b9bb8fa is-responsive">
             </div>
           </section>
 
@@ -718,8 +717,12 @@ app.post("/checkout", async (req, res) => {
             </div>
 
             <div class="summary-line muted">
-              <span>Frete ⓘ</span>
-              <span>Calculado na próxima etapa</span>
+              <span>Frete Grátis <svg role="presentation" fill="none" focusable="false" stroke-width="1" width="24" height="24" class="icon icon-picto-truck" viewBox="0 0 24 24">
+        <path d="M19 17.798h1.868a1.714 1.714 0 0 0 1.715-1.715V11.25a3.274 3.274 0 0 0-3.275-3.274H14.395l-.097 7.869" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M8.71 18.175c1.565 0 3.094-.16 4.572-.321m-9.94-.087a1.78 1.78 0 0 1-1.576-1.56c-.189-1.594-.407-3.256-.407-4.96 0-1.705.216-3.366.405-4.96a1.783 1.783 0 0 1 1.577-1.56c1.725-.186 3.523-.409 5.37-.409s3.644.223 5.368.408a1.783 1.783 0 0 1 1.578 1.56c.066.564.136 1.135.199 1.714" stroke="currentColor"></path>
+        <path d="M16.061 21.069a2.894 2.894 0 1 1 0-5.793 2.894 2.894 0 0 1 0 5.794v-.001ZM5.832 21.069a2.894 2.894 0 1 1 0-5.792 2.894 2.894 0 0 1 0 5.793v-.001Z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+              <span>8 à 12 Dias úteis</span>
             </div>
 
             <div class="total-line">
@@ -732,8 +735,7 @@ app.post("/checkout", async (req, res) => {
                 <div class="shield">♢</div>
                 <div class="trust-text">
                   <strong>Ambiente seguro</strong>
-                  <span>Seus dados e pagamento protegidos</span>
-                </div>
+                 </div>
               </div>
 
               <img loading="eager" src="https://cdn.prod.website-files.com/65c1399ac999a342139b5069/65c1399ac999a342139b5434_logo_brlc_preto.svg" alt="Logo InfinitePay" class="img-logo_infinitepay w-variant-c74a8267-4291-3686-2047-6a4b3b9bb8fa is-responsive">
@@ -741,7 +743,7 @@ app.post("/checkout", async (req, res) => {
             <div class="divider"></div>
 
             <div class="payment-info">
-              🔒 Pague com Pix, Cartão via InfinitePay
+              🔒 
             </div>
           </aside>
         </main>

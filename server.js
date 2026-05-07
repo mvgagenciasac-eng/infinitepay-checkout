@@ -757,7 +757,7 @@ app.post("/checkout", async (req, res) => {
               Salvar minhas informações para a próxima compra
             </label>
 
-            <button class="pay-button">
+            <button class="pay-button" onclick="goToInfinitePay()">
               <span class="lock"></span>
               <span>Ir para o pagamento</span>
                        
@@ -949,6 +949,56 @@ app.post("/checkout", async (req, res) => {
             </div>
 </div>
         </div>
+        <script>
+  const checkoutItems = ${JSON.stringify(items)};
+
+  async function goToInfinitePay() {
+    try {
+      const customer = {
+        contact: document.querySelector('input[placeholder="E-mail ou WhatsApp"]')?.value || "",
+        name: document.querySelector('input[placeholder="Nome completo"]')?.value || "",
+        cpf: document.querySelector('input[placeholder="CPF"]')?.value || "",
+        cep: document.querySelector('input[placeholder="CEP"]')?.value || "",
+        address: document.querySelector('input[placeholder="Endereço"]')?.value || "",
+        number: document.querySelector('input[placeholder="Número"]')?.value || "",
+        complement: document.querySelector('input[placeholder="Complemento (opcional)"]')?.value || "",
+        neighborhood: document.querySelector('input[placeholder="Bairro"]')?.value || "",
+        city: document.querySelector('input[placeholder="Cidade"]')?.value || "",
+        state: document.querySelector('select.field:last-of-type')?.value || ""
+      };
+
+      if (!customer.contact || !customer.name || !customer.cpf) {
+        alert("Preencha nome, e-mail/WhatsApp e CPF para continuar.");
+        return;
+      }
+
+      const response = await fetch("https://infinitepay-checkout-production.up.railway.app/api/create-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          items: checkoutItems,
+          customer
+        })
+      });
+
+      const data = await response.json();
+
+      if (!data.checkout_url) {
+        alert("Erro ao criar pagamento. Tente novamente.");
+        console.error(data);
+        return;
+      }
+
+      window.location.href = data.checkout_url;
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao ir para pagamento.");
+    }
+  }
+</script>
       </body>
       </html>
     `);
@@ -956,6 +1006,46 @@ app.post("/checkout", async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Erro ao abrir checkout");
+  }
+});
+
+// Criar pagamento InfinitePay a partir do checkout próprio
+app.post("/api/create-payment", async (req, res) => {
+  try {
+    const { items, customer } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Carrinho vazio" });
+    }
+
+    const payload = {
+      handle: process.env.INFINITE_TAG,
+      items: items.map((i) => ({
+        description: `${i.title}${i.variant_title ? " - " + i.variant_title : ""}`,
+        quantity: Number(i.quantity),
+        price: Math.round(Number(i.price) * 100)
+      })),
+      redirect_url: process.env.SUCCESS_URL
+    };
+
+    console.log("Cliente checkout:", customer);
+    console.log("Payload InfinitePay:", payload);
+
+    const response = await axios.post(
+      "https://api.checkout.infinitepay.io/links",
+      payload
+    );
+
+    const checkoutUrl =
+      response.data.url || response.data.checkout_url || response.data.link;
+
+    res.json({ checkout_url: checkoutUrl });
+
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    res.status(500).json({
+      error: error.response?.data || error.message
+    });
   }
 });
 

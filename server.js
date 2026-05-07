@@ -1038,6 +1038,73 @@ app.post("/api/create-payment", async (req, res) => {
     });
   }
 });
+<script>
+
+const checkoutItems = ${JSON.stringify(items)};
+
+async function goToInfinitePay() {
+
+  try {
+
+    const customer = {
+      email: document.getElementById("customer-email")?.value || "",
+      phone: document.getElementById("customer-phone")?.value || "",
+      name: document.getElementById("customer-name")?.value || "",
+      cpf: document.getElementById("customer-cpf")?.value || "",
+      cep: document.getElementById("customer-cep")?.value || "",
+      address: document.getElementById("customer-address")?.value || "",
+      number: document.getElementById("customer-number")?.value || "",
+      complement: document.getElementById("customer-complement")?.value || "",
+      neighborhood: document.getElementById("customer-neighborhood")?.value || "",
+      city: document.getElementById("customer-city")?.value || "",
+      state: document.getElementById("customer-state")?.value || ""
+    };
+
+    if (!customer.email || !customer.phone || !customer.name || !customer.cpf) {
+
+      alert("Preencha nome, e-mail, telefone e CPF.");
+
+      return;
+    }
+
+    const response = await fetch(
+      "https://infinitepay-checkout-production.up.railway.app/api/create-payment",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          items: checkoutItems,
+          customer
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!data.checkout_url) {
+
+      console.error(data);
+
+      alert("Erro ao criar pagamento.");
+
+      return;
+    }
+
+    window.location.href = data.checkout_url;
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Erro ao ir para pagamento.");
+
+  }
+
+}
+
+</script>
       </body>
       </html>
     `);

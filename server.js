@@ -699,10 +699,7 @@ app.post("/checkout", async (req, res) => {
               <span class="lock">🔒</span>
               <span>Ir para o pagamento</span>
               <span class="button-divider"></span>
-              <span class="infinitepay-mark">
-                <span class="ip-circle"></span>
-                infinitepay
-              </span>
+              <img loading="eager" src="https://cdn.prod.website-files.com/65c1399ac999a342139b5069/65c1399ac999a342139b5434_logo_brlc_preto.svg" alt="Logo InfinitePay" class="img-logo_infinitepay w-variant-c74a8267-4291-3686-2047-6a4b3b9bb8fa is-responsive">
             </button>
 
             <div class="secure-note">
@@ -739,11 +736,7 @@ app.post("/checkout", async (req, res) => {
                 </div>
               </div>
 
-              <div class="infinitepay-mark">
-                <span class="ip-circle"></span>
-                infinitepay
-              </div>
-            </div>
+              <img loading="eager" src="https://cdn.prod.website-files.com/65c1399ac999a342139b5069/65c1399ac999a342139b5434_logo_brlc_preto.svg" alt="Logo InfinitePay" class="img-logo_infinitepay w-variant-c74a8267-4291-3686-2047-6a4b3b9bb8fa is-responsive">
 
             <div class="divider"></div>
 

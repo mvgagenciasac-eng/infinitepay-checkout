@@ -119,14 +119,14 @@ const cleanCep = String(customer.cep || "").replace(/\D/g, "");
   document: cleanCpf,
   cpf: cleanCpf,
   shipping_address: {
-    zipcode: cleanCep,
-    street: customer.address,
-    number: customer.number,
-    complement: customer.complement,
-    neighborhood: customer.neighborhood,
-    city: customer.city,
-    state: customer.state,
-    country: "BR"
+  zipcode: cleanCep,
+  street: customer.address,
+  number: customer.number,
+  complement: customer.complement,
+  neighborhood: customer.neighborhood,
+  city: customer.city,
+  state: customer.state,
+  country: "BR"
   }
 },
 

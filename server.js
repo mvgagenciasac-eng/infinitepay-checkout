@@ -97,44 +97,25 @@ app.post("/api/create-payment", async (req, res) => {
     const orderNsu = `FORLLINI-${Date.now()}`;
 
     const payload = {
-      handle: process.env.INFINITE_TAG,
-      order_nsu: orderNsu,
-      items: items.map((i) => ({
-        description: `${i.title}${i.variant_title ? " - " + i.variant_title : ""}`,
-        quantity: Number(i.quantity),
-        price: Math.round(Number(i.price) * 100)
-      })),
-      customer: {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        document: customer.cpf,
-        cpf: customer.cpf,
-        address: {
-          zipcode: customer.cep,
-          street: customer.address,
-          number: customer.number,
-          complement: customer.complement,
-          neighborhood: customer.neighborhood,
-          city: customer.city,
-          state: customer.state,
-          country: "BR"
-        }
-      },
-      payer: {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        document: customer.cpf
-      },
-      buyer: {
-        name: customer.name,
-        email: customer.email,
-        phone: customer.phone,
-        document: customer.cpf
-      },
-      redirect_url: process.env.SUCCESS_URL
-    };
+  handle: process.env.INFINITE_TAG,
+
+  order_nsu: orderNsu,
+
+  items: items.map((i) => ({
+    description: `${i.title}${i.variant_title ? " - " + i.variant_title : ""}`,
+    quantity: Number(i.quantity),
+    price: Math.round(Number(i.price) * 100)
+  })),
+
+  customer: {
+    name: customer.name,
+    email: customer.email,
+    phone: customer.phone,
+    document: customer.cpf
+  },
+
+  redirect_url: process.env.SUCCESS_URL
+};
 
     console.log("Order NSU:", orderNsu);
     console.log("Cliente:", customer);

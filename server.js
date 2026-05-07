@@ -839,7 +839,7 @@ app.post("/checkout", async (req, res) => {
 
               <div class="summary-line muted">
   <span>Frete Grátis 🚚</span>
-  <span>8 à 12 Dias úteis</span>
+  <span>8 a 12 Dias úteis</span>
 </div>
               <span>8 a 12 Dias úteis</span>
             </div>

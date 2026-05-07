@@ -372,14 +372,12 @@ h2{font-size:18px;margin:0 0 14px}
     </label>
 
     <button class="pay-button" onclick="goToInfinitePay()">
-      <span>🔒</span>
       <span>Ir para o pagamento</span>
       <span class="button-divider"></span>
-      <img class="infinitepay-logo" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Logo_InfinitePay.svg" alt="InfinitePay" />
-    </button>
+     </button>
 
     <div class="secure-note">
-      🔒 Seus dados estão protegidos e o pagamento é 100% seguro.
+       <img class="infinitepay-logo" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Logo_InfinitePay.svg" alt="InfinitePay" />
     </div>
   </section>
 

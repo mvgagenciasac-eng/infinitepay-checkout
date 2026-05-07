@@ -373,8 +373,7 @@ h2{font-size:18px;margin:0 0 14px}
 
     <button class="pay-button" onclick="goToInfinitePay()">
       <span>Ir para o pagamento</span>
-      <span class="button-divider"></span>
-     </button>
+    </button>
 
     <div class="secure-note">
        <img class="infinitepay-logo" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Logo_InfinitePay.svg" alt="InfinitePay" />

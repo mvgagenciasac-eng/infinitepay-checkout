@@ -850,7 +850,7 @@ app.post("/checkout", async (req, res) => {
     <img src="https://lojaforllini.com/cdn/shop/t/3/assets/amex.svg?v=123052684372381709601775479115" alt="Amex">
     <img src="https://lojaforllini.com/cdn/shop/t/3/assets/discover.svg?v=83479973958667341501775479115" alt="Discover">
     <img src="https://lojaforllini.com/cdn/shop/t/3/assets/hipercard.svg?v=30459296697427281681775479115" alt="Hipercard">
-    <img src="https://lojaforllini.com/cdn/shop/t/3/assets/pix.svg?v=76197741278753254161775479115" alt="Pix">
+    <img src="//lojaforllini.com/cdn/shop/t/3/assets/pix.svg?v=76197741278753254161775479115" alt="PIX" width="50px" height="32.5px" loading="lazy">
   </div>
 </div>
         </div>

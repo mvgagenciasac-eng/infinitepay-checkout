@@ -371,14 +371,11 @@ app.post("/checkout", async (req, res) => {
   margin: 0 0 14px;
 }
 
-         .infinitepay-mark {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  font-family: Arial, sans-serif;
-}
+<img 
+  class="infinitepay-logo" 
+  src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Logo_InfinitePay.svg" 
+  alt="InfinitePay"
+/>
 
           .ip-circle {
   width: 18px;
@@ -625,9 +622,11 @@ app.post("/checkout", async (req, res) => {
               gap: 12px;
             }
 
-            .infinitepay-mark {
-              font-size: 20px;
-            }
+        <img 
+  class="infinitepay-logo" 
+  src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Logo_InfinitePay.svg" 
+  alt="InfinitePay"
+/>
           }
         </style>
       </head>
@@ -757,7 +756,7 @@ app.post("/checkout", async (req, res) => {
             <div class="divider"></div>
 
             <div class="payment-info">
-              🔒 Pague com Pix, Cartão ou Boleto via InfinitePay
+              🔒 Pague com Pix, Cartão via InfinitePay
             </div>
           </aside>
         </main>
@@ -835,11 +834,25 @@ app.post("/checkout", async (req, res) => {
         <div class="copyright">
           <span>© 2024 Loja Forllini. Todos os direitos reservados.</span>
 
-          <span class="infinitepay-mark" style="font-size:18px;">
-            Pagamento seguro via
-            <span class="ip-circle" style="width:24px;height:24px;border-width:5px;"></span>
-            infinitepay
-          </span>
+          <div class="footer-payment">
+  <span>Pagamento seguro via</span>
+
+  <img 
+    class="infinitepay-logo small" 
+    src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Logo_InfinitePay.svg" 
+    alt="InfinitePay"
+  />
+
+  <div class="card-flags">
+    <img src="https://lojaforllini.com/cdn/shop/t/3/assets/visa.svg?v=45599026668453523871775479115" alt="Visa">
+    <img src="https://lojaforllini.com/cdn/shop/t/3/assets/mastercard.svg?v=160938071474273240401775479115" alt="Mastercard">
+    <img src="https://lojaforllini.com/cdn/shop/t/3/assets/card-3.svg?v=162045016899304588751775479115" alt="Cartão">
+    <img src="https://lojaforllini.com/cdn/shop/t/3/assets/amex.svg?v=123052684372381709601775479115" alt="Amex">
+    <img src="https://lojaforllini.com/cdn/shop/t/3/assets/discover.svg?v=83479973958667341501775479115" alt="Discover">
+    <img src="https://lojaforllini.com/cdn/shop/t/3/assets/hipercard.svg?v=30459296697427281681775479115" alt="Hipercard">
+    <img src="https://lojaforllini.com/cdn/shop/t/3/assets/pix.svg?v=76197741278753254161775479115" alt="Pix">
+  </div>
+</div>
         </div>
       </body>
       </html>

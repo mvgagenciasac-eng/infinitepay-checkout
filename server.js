@@ -837,8 +837,7 @@ app.post("/checkout", async (req, res) => {
           <div class="footer-payment">
   <span>Pagamento seguro via</span>
 
-  <img loading="eager" src="https://cdn.prod.website-files.com/65c1399ac999a342139b5069/65c1399ac999a342139b563f_logo_branco_brlc_infinitepay.svg" alt="Logotipo InfinitePay na cor branca" class="img-logo_infinitepay w-variant-c74a8267-4291-3686-2047-6a4b3b9bb8fa is-white">
-  />
+  <img loading="eager" src="https://cdn.prod.website-files.com/65c1399ac999a342139b5069/65c1399ac999a342139b5434_logo_brlc_preto.svg" alt="Logo InfinitePay" class="img-logo_infinitepay w-variant-c74a8267-4291-3686-2047-6a4b3b9bb8fa is-responsive">
 
   <div class="h-stack gap-2 wrap justify-center we-accept">
               
@@ -848,9 +847,7 @@ app.post("/checkout", async (req, res) => {
                   <img src="//lojaforllini.com/cdn/shop/t/3/assets/mastercard.svg?v=160938071474273240401775479115" alt="Mastercard" width="50px" height="32.5px" loading="lazy">
                   <img src="//lojaforllini.com/cdn/shop/t/3/assets/card-3.svg?v=162045016899304588751775479115" alt="DinnerClub" width="50px" height="32.5px" loading="lazy">
                   <img src="//lojaforllini.com/cdn/shop/t/3/assets/amex.svg?v=123052684372381709601775479115" alt="American Express" width="50px" height="32.5px" loading="lazy">
-                  <img src="//lojaforllini.com/cdn/shop/t/3/assets/discover.svg?v=83479973958667341501775479115" alt="Discover" width="50px" height="32.5px" loading="lazy">
                   <img src="//lojaforllini.com/cdn/shop/t/3/assets/elo.svg?v=4282977770298183031775479115" alt="Elo" width="50px" height="32.5px" loading="lazy">
-                  <img src="//lojaforllini.com/cdn/shop/t/3/assets/hipercard.svg?v=30459296697427281681775479115" alt="Hipercard" width="50px" height="32.5px" loading="lazy">
                   <img src="//lojaforllini.com/cdn/shop/t/3/assets/pix.svg?v=76197741278753254161775479115" alt="PIX" width="50px" height="32.5px" loading="lazy">
                   
               

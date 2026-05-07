@@ -829,8 +829,6 @@ app.post("/checkout", async (req, res) => {
             <a href="https://lojaforllini.com/pages/contact">
   Fale conosco
 </a>
-            <a href="/pages/perguntas-frequentes">Perguntas Frequentes</a>
-            <a href="/pages/politica-de-entrega">Política de Entrega</a>
           </div>
         </footer>
 

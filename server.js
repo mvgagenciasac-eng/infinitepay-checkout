@@ -156,9 +156,40 @@ const cleanCep = String(customer.cep || "").replace(/\D/g, "");
 });
 
 // Checkout visual próprio
-app.post("/checkout", async (req, res) => {
+const checkoutSessions = {};
+app.post("/create-session", async (req, res) => {
   try {
     const { items } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Carrinho vazio" });
+    }
+
+    const sessionId = `CHK-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
+
+    checkoutSessions[sessionId] = {
+      items,
+      created_at: new Date().toISOString()
+    };
+
+    res.json({
+      checkout_url: `https://checkout.lojaforllini.com/checkout/${sessionId}`
+    });
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Erro ao criar sessão de checkout" });
+  }
+});
+app.get("/checkout/:sessionId", async (req, res) => {
+  try {
+    const session = checkoutSessions[req.params.sessionId];
+
+if (!session) {
+  return res.status(404).send("Checkout expirado ou não encontrado");
+}
+
+const { items } = session;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).send("Carrinho vazio");

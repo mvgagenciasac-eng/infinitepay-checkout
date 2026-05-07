@@ -498,12 +498,7 @@ async function goToInfinitePay() {
       return;
     }
 
-    if (!customer.cep || !customer.address || !customer.number || !customer.neighborhood || !customer.city || !customer.state) {
-      alert("Preencha todos os dados de entrega para continuar.");
-      return;
-    }
-
-    const response = await fetch("/api/create-payment", {
+    const response = await fetch("https://infinitepay-checkout-production.up.railway.app/api/create-payment", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -523,6 +518,7 @@ async function goToInfinitePay() {
     }
 
     window.location.href = data.checkout_url;
+
   } catch (error) {
     console.error(error);
     alert("Erro ao ir para pagamento.");

@@ -784,62 +784,6 @@ app.post("/checkout", async (req, res) => {
 
 </section>
 
-<section class="reviews">
-
-  <h2 class="reviews-title">
-    O que nossos clientes dizem
-  </h2>
-
-  <div class="reviews-grid">
-
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-
-      <p>
-        “Produto chegou rápido e a qualidade superou minhas expectativas.”
-      </p>
-
-      <strong>Marcos Vinícius</strong>
-      <span>São Paulo - SP</span>
-    </div>
-
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-
-      <p>
-        “Processo de compra muito simples e pagamento aprovado na hora.”
-      </p>
-
-      <strong>Felipe Andrade</strong>
-      <span>Rio de Janeiro - RJ</span>
-    </div>
-
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-
-      <p>
-        “Atendimento excelente e produto exatamente como nas fotos.”
-      </p>
-
-      <strong>Lucas Martins</strong>
-      <span>Belo Horizonte - MG</span>
-    </div>
-
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-
-      <p>
-        “Com certeza voltarei a comprar. Loja muito confiável.”
-      </p>
-
-      <strong>Renato Alves</strong>
-      <span>Curitiba - PR</span>
-    </div>
-
-  </div>
-
-</section>
-
         <footer class="footer">
           <div>
             <h3>Loja Forllini</h3>

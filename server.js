@@ -478,7 +478,7 @@ h2{font-size:18px;margin:0 0 14px}
 const checkoutItems = ${JSON.stringify(safeItems)};
 
 async function goToInfinitePay() {
-  alert("Botão funcionando");
+  try {
     const customer = {
       email: document.getElementById("customer-email").value.trim(),
       phone: document.getElementById("customer-phone").value.trim(),

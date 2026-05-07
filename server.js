@@ -118,7 +118,7 @@ const cleanCep = String(customer.cep || "").replace(/\D/g, "");
   phone: phoneWithDdi,
   document: cleanCpf,
   cpf: cleanCpf,
-  address: {
+  shipping_address: {
     zipcode: cleanCep,
     street: customer.address,
     number: customer.number,

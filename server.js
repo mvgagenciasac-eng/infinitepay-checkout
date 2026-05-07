@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const express = require("express");
+const express = require("express");f
 const axios = require("axios");
 const cors = require("cors");
 const crypto = require("crypto");
@@ -95,6 +95,11 @@ app.post("/api/create-payment", async (req, res) => {
     }
 
     const orderNsu = `FORLLINI-${Date.now()}`;
+    const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
+const phoneWithDdi = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
+
+const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
+const cleanCep = String(customer.cep || "").replace(/\D/g, "");
 
     const payload = {
   handle: process.env.INFINITE_TAG,
@@ -107,12 +112,23 @@ app.post("/api/create-payment", async (req, res) => {
     price: Math.round(Number(i.price) * 100)
   })),
 
-  customer: {
-    name: customer.name,
-    email: customer.email,
-    phone: customer.phone,
-    document: customer.cpf
-  },
+ customer: {
+  name: customer.name,
+  email: customer.email,
+  phone: phoneWithDdi,
+  document: cleanCpf,
+  cpf: cleanCpf,
+  address: {
+    zipcode: cleanCep,
+    street: customer.address,
+    number: customer.number,
+    complement: customer.complement,
+    neighborhood: customer.neighborhood,
+    city: customer.city,
+    state: customer.state,
+    country: "BR"
+  }
+},
 
   redirect_url: process.env.SUCCESS_URL
 };

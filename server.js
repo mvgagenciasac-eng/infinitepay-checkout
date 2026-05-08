@@ -335,6 +335,28 @@ app.get("/checkout/:sessionId", async (req, res) => {
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4MVQ95824Y"></script>
+
+<script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+  dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+
+gtag('config', 'G-4MVQ95824Y');
+
+gtag('config', 'AW-18025145804');
+
+gtag('event', 'conversion', {
+  'send_to': 'AW-18025145804/pV3TCPHW86YcEMzLh5ND',
+  'value': 0.0,
+  'currency': 'BRL'
+});
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Checkout Forllini</title>

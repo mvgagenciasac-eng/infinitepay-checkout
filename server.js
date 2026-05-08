@@ -74,6 +74,15 @@ app.post("/create-checkout", async (req, res) => {
     const checkoutUrl =
       response.data.url || response.data.checkout_url || response.data.link;
 
+    savedCheckouts[orderNsu] = {
+  order_nsu: orderNsu,
+  items,
+  customer,
+  created_at: new Date().toISOString()
+};
+
+console.log("CHECKOUT SALVO:", orderNsu);
+
     res.json({ checkout_url: checkoutUrl });
   } catch (error) {
     console.error(error.response?.data || error.message);

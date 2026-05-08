@@ -161,7 +161,7 @@ console.log("CHECKOUT SALVO:", orderNsu);
 });
 
 // Checkout visual próprio
-const checkoutSessions = {};
+
 app.post("/create-session", async (req, res) => {
   try {
     const { items } = req.body;

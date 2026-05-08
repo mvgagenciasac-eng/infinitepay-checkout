@@ -197,6 +197,11 @@ app.post("/api/create-payment", async (req, res) => {
 
     const orderNsu = `FORLLINI-${Date.now()}`;
 
+const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
+const phoneWithDdi = cleanPhone.startsWith("55")
+  ? cleanPhone
+  : `55${cleanPhone}`;
+
    const payload = {
   handle: process.env.INFINITE_TAG,
 

@@ -6,6 +6,9 @@ const crypto = require("crypto");
 
 const app = express();
 
+const savedCheckouts = {};
+const checkoutSessions = {};
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -19,20 +22,12 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-app.options("/create-session", (req, res) => {
-  res.status(204).end();
-});
-
-app.use(express.json({ limit: "10mb" }));
-
-
-// Página inicial
 app.get("/", (req, res) => {
   res.status(200).send("InfinitePay Checkout API online");
 });
 
-// Teste InfinitePay
 app.get("/test-checkout", async (req, res) => {
   try {
     const payload = {
@@ -57,122 +52,11 @@ app.get("/test-checkout", async (req, res) => {
 
     res.redirect(checkoutUrl);
   } catch (error) {
-    console.error(error.response?.data || error.message);
+    console.error("Erro /test-checkout:", error.response?.data || error.message);
     res.status(500).json({ error: error.response?.data || error.message });
   }
 });
 
-// Checkout antigo direto
-app.post("/create-checkout", async (req, res) => {
-  try {
-    const { items } = req.body;
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ error: "Carrinho vazio ou inválido" });
-    }
-
-    const payload = {
-      handle: process.env.INFINITE_TAG,
-      items: items.map((i) => ({
-  description: `${i.title || "Produto"}${i.variant_title ? " - " + i.variant_title : ""}`,
-  quantity: Number(i.quantity || 1),
-  price: Math.round(Number(i.price || 0) * 100)
-})),
-      redirect_url: process.env.SUCCESS_URL
-    };
-
-    const response = await axios.post(
-      "https://api.checkout.infinitepay.io/links",
-      payload
-    );
-
-    const checkoutUrl =
-      response.data.url || response.data.checkout_url || response.data.link;
-
-    savedCheckouts[orderNsu] = {
-  order_nsu: orderNsu,
-  items,
-  customer,
-  created_at: new Date().toISOString()
-};
-
-console.log("CHECKOUT SALVO:", orderNsu);
-
-    res.json({ checkout_url: checkoutUrl });
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-    res.status(500).json({ error: error.response?.data || error.message });
-  }
-});
-
-// Criar pagamento InfinitePay pelo checkout próprio
-app.post("/api/create-payment", async (req, res) => {
-  try {
-    const { items, customer } = req.body;
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ error: "Carrinho vazio" });
-    }
-
-    if (!customer?.email || !customer?.phone || !customer?.name || !customer?.cpf) {
-      return res.status(400).json({
-        error: "Dados obrigatórios ausentes"
-      });
-    }
-
- const orderNsu = `FORLLINI-${Date.now()}`;
-
-const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
-const phoneWithDdi = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
-const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
-
-console.log("ITEMS RECEBIDOS:", JSON.stringify(items, null, 2));
-
-const payload = {
-  handle: process.env.INFINITE_TAG,
-
-  order_nsu: orderNsu,
-
-items: items.map((i) => ({
-  description: `${i.title || "Produto"}${i.variant_title ? " - " + i.variant_title : ""}`,
-  quantity: Number(i.quantity || 1),
-  price: Math.round(Number(i.price || 0) * 100)
-})),
-
-customer: {
-  name: customer.name,
-  email: customer.email,
-  phone: phoneWithDdi,
-  document: cleanCpf
-},
-
-redirect_url: process.env.SUCCESS_URL
-};
-
-    console.log("Order NSU:", orderNsu);
-    console.log("Cliente:", customer);
-    console.log("Payload InfinitePay:", payload);
-
-    const response = await axios.post(
-      "https://api.checkout.infinitepay.io/links",
-      payload
-    );
-
-    const checkoutUrl =
-      response.data.url || response.data.checkout_url || response.data.link;
-
-    res.json({
-      checkout_url: checkoutUrl,
-      order_nsu: orderNsu
-    });
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-    res.status(500).json({ error: error.response?.data || error.message });
-  }
-});
-
-// Checkout visual próprio
-const checkoutSessions = {};
 app.post("/create-session", async (req, res) => {
   try {
     const { items } = req.body;
@@ -189,23 +73,120 @@ app.post("/create-session", async (req, res) => {
     };
 
     res.json({
-      checkout_url: `https://checkout.lojaforllini.com/checkout/${sessionId}`
+      checkout_url: `${process.env.APP_URL || "https://checkout.lojaforllini.com"}/checkout/${sessionId}`
     });
-
   } catch (error) {
-    console.error(error.message);
+    console.error("Erro /create-session:", error.message);
     res.status(500).json({ error: "Erro ao criar sessão de checkout" });
   }
 });
+
+app.post("/create-session-form", async (req, res) => {
+  try {
+    const items = JSON.parse(req.body.items || "[]");
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).send("Carrinho vazio");
+    }
+
+    const sessionId = `CHK-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
+
+    checkoutSessions[sessionId] = {
+      items,
+      created_at: new Date().toISOString()
+    };
+
+    res.redirect(`${process.env.APP_URL || "https://checkout.lojaforllini.com"}/checkout/${sessionId}`);
+  } catch (error) {
+    console.error("Erro /create-session-form:", error.message);
+    res.status(500).send("Erro ao criar checkout");
+  }
+});
+
+app.post("/api/create-payment", async (req, res) => {
+  try {
+    const { items, customer } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Carrinho vazio" });
+    }
+
+    if (!customer?.email || !customer?.phone || !customer?.name || !customer?.cpf) {
+      return res.status(400).json({
+        error: "Dados obrigatórios ausentes"
+      });
+    }
+
+    const orderNsu = `FORLLINI-${Date.now()}`;
+
+    const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
+    const phoneWithDdi = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
+    const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
+
+    const payload = {
+      handle: process.env.INFINITE_TAG,
+      order_nsu: orderNsu,
+      items: items.map((i) => ({
+        description: `${i.title || "Produto"}${i.variant_title ? " - " + i.variant_title : ""}`,
+        quantity: Number(i.quantity || 1),
+        price: Math.round(Number(i.price || 0) * 100)
+      })),
+      customer: {
+        name: customer.name,
+        email: customer.email,
+        phone: phoneWithDdi,
+        document: cleanCpf
+      },
+      redirect_url: process.env.SUCCESS_URL
+    };
+
+    console.log("Order NSU:", orderNsu);
+    console.log("Payload InfinitePay:", JSON.stringify(payload, null, 2));
+
+    const response = await axios.post(
+      "https://api.checkout.infinitepay.io/links",
+      payload
+    );
+
+    const checkoutUrl =
+      response.data.url || response.data.checkout_url || response.data.link;
+
+    if (!checkoutUrl) {
+      console.error("Resposta InfinitePay sem checkout_url:", response.data);
+      return res.status(500).json({
+        error: "InfinitePay não retornou URL de pagamento",
+        details: response.data
+      });
+    }
+
+    savedCheckouts[orderNsu] = {
+      order_nsu: orderNsu,
+      items,
+      customer,
+      created_at: new Date().toISOString()
+    };
+
+    console.log("CHECKOUT SALVO:", orderNsu);
+
+    res.json({
+      checkout_url: checkoutUrl,
+      order_nsu: orderNsu
+    });
+  } catch (error) {
+    console.error("Erro /api/create-payment:", error.response?.data || error.message);
+    res.status(500).json({ error: error.response?.data || error.message });
+  }
+});
+
 app.get("/checkout/:sessionId", async (req, res) => {
   try {
     const session = checkoutSessions[req.params.sessionId];
 
-if (!session) {
-  return res.status(404).send("Checkout expirado ou não encontrado");
-}
+    if (!session) {
+      return res.status(404).send("Checkout expirado ou não encontrado");
+    }
 
-const { items } = session;
+    const { items } = session;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).send("Carrinho vazio");
@@ -221,8 +202,8 @@ const { items } = session;
     let total = 0;
 
     const safeItems = items.map((item) => {
-      const price = Number(item.price);
-      const quantity = Number(item.quantity);
+      const price = Number(item.price || 0);
+      const quantity = Number(item.quantity || 1);
       const itemTotal = price * quantity;
 
       total += itemTotal;
@@ -290,7 +271,6 @@ h2{font-size:18px;margin:0 0 14px}
 .checkbox-line input{width:17px;height:17px}
 .pay-button{width:100%;height:52px;border:none;background:#000;color:#fff;border-radius:6px;font-size:16px;font-weight:600;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:14px;margin-top:18px}
 .pay-button:hover{opacity:.9}
-.button-divider{width:1px;height:26px;background:rgba(255,255,255,.35)}
 .infinitepay-logo{height:23px;width:auto;display:inline-block}
 .infinitepay-logo.small{height:18px}
 .secure-note{display:flex;justify-content:center;align-items:center;gap:8px;color:#777;font-size:13px;margin-top:18px}
@@ -355,7 +335,7 @@ h2{font-size:18px;margin:0 0 14px}
       <span>›</span>
       <strong>Informações de Entrega</strong>
       <span>›</span>
-      <span>Pagamento Infinitepay</span>
+      <span>Pagamento InfinitePay</span>
     </div>
 
     <div class="section-title">
@@ -541,15 +521,12 @@ h2{font-size:18px;margin:0 0 14px}
 const checkoutItems = ${JSON.stringify(safeItems)};
 
 async function buscarCEP(cep) {
-  cep = cep.replace(/\D/g, "");
+  cep = cep.replace(/\\D/g, "");
 
   if (cep.length !== 8) return;
 
   try {
-    const response = await fetch(
-      "https://viacep.com.br/ws/" + cep + "/json/"
-    );
-
+    const response = await fetch("https://viacep.com.br/ws/" + cep + "/json/");
     const data = await response.json();
 
     if (data.erro) return;
@@ -558,7 +535,6 @@ async function buscarCEP(cep) {
     document.getElementById("customer-neighborhood").value = data.bairro || "";
     document.getElementById("customer-city").value = data.localidade || "";
     document.getElementById("customer-state").value = data.uf || "";
-
   } catch (error) {
     console.error("Erro CEP:", error);
   }
@@ -569,7 +545,6 @@ document.getElementById("customer-cep").addEventListener("blur", (e) => {
 });
 
 async function goToInfinitePay() {
-
   try {
     const customer = {
       email: document.getElementById("customer-email").value.trim(),
@@ -590,16 +565,16 @@ async function goToInfinitePay() {
       return;
     }
 
-const response = await fetch("https://checkout.lojaforllini.com/api/create-payment", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-body: JSON.stringify({
-  items: checkoutItems,
-  customer: customer
-})
-});
+    const response = await fetch("/api/create-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        items: checkoutItems,
+        customer: customer
+      })
+    });
 
     const data = await response.json();
 
@@ -610,7 +585,6 @@ body: JSON.stringify({
     }
 
     window.location.href = data.checkout_url;
-
   } catch (error) {
     console.error(error);
     alert("Erro ao ir para pagamento.");
@@ -622,7 +596,7 @@ body: JSON.stringify({
 </html>
     `);
   } catch (error) {
-    console.error(error.message);
+    console.error("Erro /checkout:", error.message);
     res.status(500).send("Erro ao abrir checkout");
   }
 });
@@ -640,6 +614,8 @@ async function createShopifyOrder(checkoutData, paymentEvent) {
   const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
   const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
   const cleanCep = String(customer.cep || "").replace(/\D/g, "");
+
+  const fullAddress = `${customer.address || ""}${customer.number ? ", " + customer.number : ""}`;
 
   const orderPayload = {
     order: {
@@ -661,7 +637,7 @@ async function createShopifyOrder(checkoutData, paymentEvent) {
 
       shipping_address: {
         first_name: customer.name,
-        address1: customer.address,
+        address1: fullAddress,
         address2: customer.complement || "",
         phone: cleanPhone,
         city: customer.city,
@@ -672,7 +648,7 @@ async function createShopifyOrder(checkoutData, paymentEvent) {
 
       billing_address: {
         first_name: customer.name,
-        address1: customer.address,
+        address1: fullAddress,
         address2: customer.complement || "",
         phone: cleanPhone,
         city: customer.city,
@@ -723,7 +699,6 @@ async function createShopifyOrder(checkoutData, paymentEvent) {
   return response.data.order;
 }
 
-// Webhook InfinitePay
 app.post("/webhook", async (req, res) => {
   try {
     const event = req.body;
@@ -731,12 +706,15 @@ app.post("/webhook", async (req, res) => {
     console.log("Webhook InfinitePay recebido:", JSON.stringify(event, null, 2));
 
     const status = event.status || event.payment_status || event.order_status;
+
     const orderNsu =
       event.order_nsu ||
       event.orderNsu ||
       event.nsu ||
       event.external_id ||
-      event.reference;
+      event.reference ||
+      event.order?.order_nsu ||
+      event.order?.nsu;
 
     if (status === "paid" || status === "approved" || status === "completed") {
       console.log("Pagamento aprovado:", orderNsu);
@@ -760,4 +738,17 @@ app.post("/webhook", async (req, res) => {
     console.error("Erro no webhook:", error.response?.data || error.message);
     res.sendStatus(500);
   }
+});
+
+app.get("/debug-saved-checkouts", (req, res) => {
+  res.json({
+    total: Object.keys(savedCheckouts).length,
+    checkouts: savedCheckouts
+  });
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });

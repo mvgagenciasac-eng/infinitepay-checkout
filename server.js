@@ -150,6 +150,15 @@ redirect_url: process.env.SUCCESS_URL
     const checkoutUrl =
       response.data.url || response.data.checkout_url || response.data.link;
 
+    savedCheckouts[orderNsu] = {
+  order_nsu: orderNsu,
+  items,
+  customer,
+  created_at: new Date().toISOString()
+};
+
+console.log("CHECKOUT SALVO:", orderNsu);
+
     res.json({
       checkout_url: checkoutUrl,
       order_nsu: orderNsu

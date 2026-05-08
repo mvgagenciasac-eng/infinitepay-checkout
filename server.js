@@ -103,6 +103,84 @@ app.post("/create-session-form", async (req, res) => {
   }
 });
 
+async function createShopifyPendingOrder(checkoutData) {
+  const customer = checkoutData.customer;
+  const items = checkoutData.items;
+
+  const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
+  const shopifyPhone = cleanPhone.startsWith("55") ? `+${cleanPhone}` : `+55${cleanPhone}`;
+  const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
+  const cleanCep = String(customer.cep || "").replace(/\D/g, "");
+
+  const fullAddress = `${customer.address || ""}${customer.number ? ", " + customer.number : ""}`;
+
+  const lineItems = items.map((item) => ({
+    title: `${item.title || "Produto"}${item.variant_title ? " - " + item.variant_title : ""}`,
+    quantity: Number(item.quantity || 1),
+    price: Number(item.price || 0).toFixed(2)
+  }));
+
+  const orderPayload = {
+    order: {
+      email: customer.email,
+      financial_status: "pending",
+      fulfillment_status: null,
+      send_receipt: false,
+      send_fulfillment_receipt: false,
+      tags: "InfinitePay, Checkout Próprio, Pagamento Pendente",
+      note: `Pedido iniciado no checkout próprio. Aguardando confirmação manual InfinitePay. NSU: ${checkoutData.order_nsu}`,
+
+      line_items: lineItems,
+
+      customer: {
+        first_name: customer.name,
+        email: customer.email
+      },
+
+      shipping_address: {
+        first_name: customer.name,
+        address1: fullAddress,
+        address2: customer.complement || "",
+        phone: shopifyPhone,
+        city: customer.city,
+        province: customer.state,
+        country: "Brazil",
+        zip: cleanCep
+      },
+
+      billing_address: {
+        first_name: customer.name,
+        address1: fullAddress,
+        address2: customer.complement || "",
+        phone: shopifyPhone,
+        city: customer.city,
+        province: customer.state,
+        country: "Brazil",
+        zip: cleanCep
+      },
+
+      note_attributes: [
+        { name: "CPF", value: cleanCpf },
+        { name: "InfinitePay NSU", value: checkoutData.order_nsu },
+        { name: "Status", value: "Aguardando pagamento InfinitePay" }
+      ]
+    }
+  };
+
+  const response = await axios.post(
+    `https://${process.env.SHOPIFY_STORE}/admin/api/2026-04/orders.json`,
+    orderPayload,
+    {
+      headers: {
+        "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
+  return response.data.order;
+}
+
 app.post("/api/create-payment", async (req, res) => {
   try {
     const { items, customer } = req.body;
@@ -150,18 +228,26 @@ app.post("/api/create-payment", async (req, res) => {
       });
     }
 
-    savedCheckouts[orderNsu] = {
+    const checkoutData = {
       order_nsu: orderNsu,
       items,
       customer,
+      checkout_url: checkoutUrl,
       created_at: new Date().toISOString()
     };
 
+    savedCheckouts[orderNsu] = checkoutData;
+
     console.log("CHECKOUT SALVO:", orderNsu);
+
+    const shopifyOrder = await createShopifyPendingOrder(checkoutData);
+
+    console.log("PEDIDO PENDENTE CRIADO NA SHOPIFY:", shopifyOrder.id);
 
     res.json({
       checkout_url: checkoutUrl,
-      order_nsu: orderNsu
+      order_nsu: orderNsu,
+      shopify_order_id: shopifyOrder.id
     });
   } catch (error) {
     console.error("Erro /api/create-payment:", error.response?.data || error.message);

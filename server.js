@@ -31,6 +31,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.options("/create-session", (req, res) => {
+  res.status(204).end();
+});
+
 app.use(express.json({ limit: "10mb" }));
 
 

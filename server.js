@@ -57,10 +57,10 @@ app.post("/create-checkout", async (req, res) => {
     const payload = {
       handle: process.env.INFINITE_TAG,
       items: items.map((i) => ({
-        description: i.title,
-        quantity: Number(i.quantity),
-        price: Math.round(Number(i.price) * 100)
-      })),
+  description: `${i.title || "Produto"}${i.variant_title ? " - " + i.variant_title : ""}`,
+  quantity: Number(i.quantity || 1),
+  price: Math.round(Number(i.price || 0) * 100)
+})),
       redirect_url: process.env.SUCCESS_URL
     };
 

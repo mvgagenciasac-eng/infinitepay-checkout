@@ -119,25 +119,18 @@ app.post("/api/create-payment", async (req, res) => {
 
     const orderNsu = `FORLLINI-${Date.now()}`;
 
-    const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
-    const phoneWithDdi = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
-    const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
+    const payload = {
+      handle: process.env.INFINITE_TAG,
+      redirect_url: process.env.SUCCESS_URL,
+      webhook_url: `${process.env.APP_URL}/webhook`,
+      order_nsu: orderNsu,
+      items: items.map((i) => ({
+        description: `${i.title || "Produto"}${i.variant_title ? " - " + i.variant_title : ""}`,
+        quantity: Number(i.quantity || 1),
+        price: Math.round(Number(i.price || 0) * 100)
+      }))
+    };
 
-  const payload = {
-  handle: process.env.INFINITE_TAG,
-  redirect_url: process.env.SUCCESS_URL,
-  webhook_url: `${process.env.APP_URL}/webhook`,
-  order_nsu: orderNsu,
-  items: items.map((i) => ({
-    description: `${i.title || "Produto"}${i.variant_title ? " - " + i.variant_title : ""}`,
-    quantity: Number(i.quantity || 1),
-    price: Math.round(Number(i.price || 0) * 100)
-  }))
-};
-  redirect_url: process.env.SUCCESS_URL,
-
-  webhook_url: `${process.env.APP_URL}/webhook`
-};
     console.log("Order NSU:", orderNsu);
     console.log("Payload InfinitePay:", JSON.stringify(payload, null, 2));
 
@@ -175,7 +168,6 @@ app.post("/api/create-payment", async (req, res) => {
     res.status(500).json({ error: error.response?.data || error.message });
   }
 });
-
 app.get("/checkout/:sessionId", async (req, res) => {
   try {
     const session = checkoutSessions[req.params.sessionId];

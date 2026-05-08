@@ -712,83 +712,37 @@ async function createShopifyOrder(checkoutData, paymentEvent) {
 app.post("/webhook", async (req, res) => {
   try {
     const event = req.body;
-    console.log("Webhook InfinitePay recebido:", event);
 
-    if (event.status === "paid") {
-      console.log("Pagamento aprovado:", event);
+    console.log("Webhook InfinitePay recebido:", JSON.stringify(event, null, 2));
+
+    const status = event.status || event.payment_status || event.order_status;
+    const orderNsu =
+      event.order_nsu ||
+      event.orderNsu ||
+      event.nsu ||
+      event.external_id ||
+      event.reference;
+
+    if (status === "paid" || status === "approved" || status === "completed") {
+      console.log("Pagamento aprovado:", orderNsu);
+
+      const checkoutData = savedCheckouts[orderNsu];
+
+      if (!checkoutData) {
+        console.log("Checkout não encontrado para NSU:", orderNsu);
+        return res.sendStatus(200);
+      }
+
+      const shopifyOrder = await createShopifyOrder(checkoutData, event);
+
+      console.log("Pedido Shopify criado:", shopifyOrder.id);
+
+      delete savedCheckouts[orderNsu];
     }
 
     res.sendStatus(200);
   } catch (error) {
-    console.error(error.message);
+    console.error("Erro no webhook:", error.response?.data || error.message);
     res.sendStatus(500);
   }
-});
-
-// OAuth Shopify
-app.get("/auth", async (req, res) => {
-  try {
-    const shop = req.query.shop;
-
-    if (!shop) {
-      return res.status(400).send("Loja não informada. Use ?shop=sua-loja.myshopify.com");
-    }
-
-    const state = crypto.randomBytes(16).toString("hex");
-    const redirectUri = `${process.env.APP_URL}/auth/callback`;
-
-    const installUrl =
-      `https://${shop}/admin/oauth/authorize` +
-      `?client_id=${process.env.SHOPIFY_API_KEY}` +
-      `&scope=${encodeURIComponent(process.env.SHOPIFY_SCOPES)}` +
-      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-      `&state=${state}`;
-
-    res.redirect(installUrl);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Erro ao iniciar instalação do app");
-  }
-});
-
-// Callback Shopify OAuth
-app.get("/auth/callback", async (req, res) => {
-  try {
-    const { shop, code } = req.query;
-
-    if (!shop || !code) {
-      return res.status(400).send("Parâmetros ausentes: shop ou code");
-    }
-
-    const tokenResponse = await axios.post(
-      `https://${shop}/admin/oauth/access_token`,
-      {
-        client_id: process.env.SHOPIFY_API_KEY,
-        client_secret: process.env.SHOPIFY_API_SECRET,
-        code
-      }
-    );
-
-    const accessToken = tokenResponse.data.access_token;
-
-    res.send(`
-      <h1>App instalado com sucesso!</h1>
-      <p>Copie este token e salve no Railway como <strong>SHOPIFY_ACCESS_TOKEN</strong>:</p>
-      <textarea rows="8" cols="90" readonly>${accessToken}</textarea>
-      <p>Loja: ${shop}</p>
-    `);
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-
-    res.status(500).send(`
-      <h1>Erro ao instalar app</h1>
-      <pre>${JSON.stringify(error.response?.data || error.message, null, 2)}</pre>
-    `);
-  }
-});
-
-const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log("Servidor rodando na porta " + PORT);
 });

@@ -1,4 +1,13 @@
 const savedCheckouts = {};
+require("dotenv").config();
+
+const express = require("express");
+const axios = require("axios");
+const crypto = require("crypto");
+
+const app = express();
+
+const savedCheckouts = {};
 const checkoutSessions = {};
 
 app.use((req, res, next) => {
@@ -14,6 +23,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 
 // Página inicial

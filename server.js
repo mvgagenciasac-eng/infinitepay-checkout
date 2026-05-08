@@ -9,7 +9,18 @@ const app = express();
 
 const savedCheckouts = {};
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://lojaforllini.com",
+    "https://www.lojaforllini.com",
+    "https://checkout.lojaforllini.com"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.options("*", cors());
+
 app.use(express.json({ limit: "10mb" }));
 
 // Página inicial

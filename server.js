@@ -123,22 +123,21 @@ app.post("/api/create-payment", async (req, res) => {
     const phoneWithDdi = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
     const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
 
-    const payload = {
+   const payload = {
   handle: process.env.INFINITE_TAG,
+
+  redirect_url: process.env.SUCCESS_URL,
+
+  webhook_url: `${process.env.APP_URL}/webhook`,
+
   order_nsu: orderNsu,
 
   items: items.map((i) => ({
     description: `${i.title || "Produto"}${i.variant_title ? " - " + i.variant_title : ""}`,
     quantity: Number(i.quantity || 1),
     price: Math.round(Number(i.price || 0) * 100)
-  })),
-
-  customer: {
-    name: customer.name,
-    email: customer.email,
-    phone: phoneWithDdi,
-    document: cleanCpf
-  },
+  }))
+};
 
   redirect_url: process.env.SUCCESS_URL,
 

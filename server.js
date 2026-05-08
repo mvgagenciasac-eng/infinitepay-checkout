@@ -571,14 +571,8 @@ const response = await fetch("https://checkout.lojaforllini.com/api/create-payme
   headers: {
     "Content-Type": "application/json"
   },
- body: JSON.stringify({
-  items: checkoutItems.map(item => ({
-    title: item.product_title,
-    variant_title: item.variant_title,
-    quantity: item.quantity,
-    price: item.final_price / 100,
-    image: item.image
-  })),
+body: JSON.stringify({
+  items: checkoutItems,
   customer: customer
 })
 });

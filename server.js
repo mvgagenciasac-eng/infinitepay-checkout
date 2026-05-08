@@ -7,6 +7,8 @@ const crypto = require("crypto");
 
 const app = express();
 
+const savedCheckouts = {};
+
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 

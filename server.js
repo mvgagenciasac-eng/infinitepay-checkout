@@ -337,9 +337,9 @@ h2{font-size:18px;margin:0 0 14px}
     <div class="steps">
       <span>Carrinho</span>
       <span>›</span>
-      <strong>Informações</strong>
+      <strong>Informações de Entrega</strong>
       <span>›</span>
-      <span>Pagamento</span>
+      <span>Pagamento Infinitepay</span>
     </div>
 
     <div class="section-title">

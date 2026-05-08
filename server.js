@@ -107,13 +107,11 @@ const payload = {
 
   order_nsu: orderNsu,
 
-items: [
-  {
-    description: "Produto Forllini",
-    quantity: 1,
-    price: 1000
-  }
-],
+items: items.map((i) => ({
+  description: `${i.title || "Produto"}${i.variant_title ? " - " + i.variant_title : ""}`,
+  quantity: Number(i.quantity || 1),
+  price: Math.round(Number(i.price || 0) * 100)
+})),
 
 customer: {
   name: customer.name,

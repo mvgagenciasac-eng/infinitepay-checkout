@@ -105,11 +105,13 @@ const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
 
   order_nsu: orderNsu,
 
-  items: items.map((i) => ({
-    description: `${i.title}${i.variant_title ? " - " + i.variant_title : ""}`,
-    quantity: Number(i.quantity),
-    price: Math.round(Number(i.price) * 100)
-  })),
+items: [
+  {
+    description: "Produto Forllini",
+    quantity: 1,
+    price: 1000
+  }
+],
 
 customer: {
   name: customer.name,

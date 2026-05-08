@@ -116,9 +116,9 @@ customer: {
   email: customer.email,
   phone: phoneWithDdi,
   document: cleanCpf
-},cleanCep
+},
 
-  redirect_url: process.env.SUCCESS_URL
+redirect_url: process.env.SUCCESS_URL
 };
 
     console.log("Order NSU:", orderNsu);

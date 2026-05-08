@@ -94,16 +94,15 @@ app.post("/api/create-payment", async (req, res) => {
       });
     }
 
-    const orderNsu = `FORLLINI-${Date.now()}`;
-    const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
-const phoneWithDdi = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
-const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
+ const orderNsu = `FORLLINI-${Date.now()}`;
+
 const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
 const phoneWithDdi = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
 const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
+
 console.log("ITEMS RECEBIDOS:", JSON.stringify(items, null, 2));
 
-    const payload = {
+const payload = {
   handle: process.env.INFINITE_TAG,
 
   order_nsu: orderNsu,

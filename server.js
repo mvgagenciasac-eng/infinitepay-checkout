@@ -1,10 +1,5 @@
-require("dotenv").config();
-
-const express = require("express");
-const axios = require("axios");
-const crypto = require("crypto");
-
-const app = express();
+const savedCheckouts = {};
+const checkoutSessions = {};
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -16,12 +11,6 @@ app.use((req, res, next) => {
   }
 
   next();
-});
-
-app.use(express.json({ limit: "10mb" }));
-
-app.options("/create-session", (req, res) => {
-  res.status(204).end();
 });
 
 app.use(express.json({ limit: "10mb" }));

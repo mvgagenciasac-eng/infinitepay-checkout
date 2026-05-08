@@ -612,6 +612,102 @@ body: JSON.stringify({
   }
 });
 
+async function createShopifyOrder(checkoutData, paymentEvent) {
+  const customer = checkoutData.customer;
+  const items = checkoutData.items;
+
+  const lineItems = items.map((item) => ({
+    title: `${item.title || "Produto"}${item.variant_title ? " - " + item.variant_title : ""}`,
+    quantity: Number(item.quantity || 1),
+    price: Number(item.price || 0).toFixed(2)
+  }));
+
+  const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
+  const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
+  const cleanCep = String(customer.cep || "").replace(/\D/g, "");
+
+  const orderPayload = {
+    order: {
+      email: customer.email,
+      financial_status: "paid",
+      fulfillment_status: null,
+      send_receipt: false,
+      send_fulfillment_receipt: false,
+      note: `Pedido pago via InfinitePay. NSU: ${checkoutData.order_nsu}`,
+      tags: "InfinitePay, Checkout Próprio",
+
+      line_items: lineItems,
+
+      customer: {
+        first_name: customer.name,
+        email: customer.email,
+        phone: cleanPhone
+      },
+
+      shipping_address: {
+        first_name: customer.name,
+        address1: customer.address,
+        address2: customer.complement || "",
+        phone: cleanPhone,
+        city: customer.city,
+        province: customer.state,
+        country: "Brazil",
+        zip: cleanCep
+      },
+
+      billing_address: {
+        first_name: customer.name,
+        address1: customer.address,
+        address2: customer.complement || "",
+        phone: cleanPhone,
+        city: customer.city,
+        province: customer.state,
+        country: "Brazil",
+        zip: cleanCep
+      },
+
+      transactions: [
+        {
+          kind: "sale",
+          status: "success",
+          amount: lineItems
+            .reduce((total, item) => total + Number(item.price) * Number(item.quantity), 0)
+            .toFixed(2),
+          gateway: "InfinitePay"
+        }
+      ],
+
+      note_attributes: [
+        {
+          name: "CPF",
+          value: cleanCpf
+        },
+        {
+          name: "InfinitePay NSU",
+          value: checkoutData.order_nsu
+        },
+        {
+          name: "Pagamento",
+          value: "InfinitePay"
+        }
+      ]
+    }
+  };
+
+  const response = await axios.post(
+    `https://${process.env.SHOPIFY_STORE}/admin/api/2026-04/orders.json`,
+    orderPayload,
+    {
+      headers: {
+        "X-Shopify-Access-Token": process.env.SHOPIFY_ACCESS_TOKEN,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
+  return response.data.order;
+}
+
 // Webhook InfinitePay
 app.post("/webhook", async (req, res) => {
   try {

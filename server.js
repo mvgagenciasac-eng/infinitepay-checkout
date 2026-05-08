@@ -99,7 +99,6 @@ app.post("/api/create-payment", async (req, res) => {
 const phoneWithDdi = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
 
 const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
-const cleanCep = String(customer.cep || "").replace(/\D/g, "");
 
     const payload = {
   handle: process.env.INFINITE_TAG,
@@ -112,23 +111,12 @@ const cleanCep = String(customer.cep || "").replace(/\D/g, "");
     price: Math.round(Number(i.price) * 100)
   })),
 
- customer: {
+customer: {
   name: customer.name,
   email: customer.email,
   phone: phoneWithDdi,
-  document: cleanCpf,
-  cpf: cleanCpf,
-  shipping_address: {
-  zipcode: cleanCep,
-  street: customer.address,
-  number: customer.number,
-  complement: customer.complement,
-  neighborhood: customer.neighborhood,
-  city: customer.city,
-  state: customer.state,
-  country: "BR"
-  }
-},
+  document: cleanCpf
+},cleanCep
 
   redirect_url: process.env.SUCCESS_URL
 };

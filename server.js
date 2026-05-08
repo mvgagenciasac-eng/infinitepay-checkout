@@ -6,23 +6,10 @@ const crypto = require("crypto");
 
 const app = express();
 
-const allowedOrigins = [
-  "https://lojaforllini.com",
-  "https://www.lojaforllini.com",
-  "https://checkout.lojaforllini.com"
-];
-
 app.use((req, res, next) => {
-  const origin = req.headers.origin;
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  res.setHeader("Vary", "Origin");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept");
-  res.setHeader("Access-Control-Max-Age", "86400");
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
@@ -30,6 +17,8 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use(express.json({ limit: "10mb" }));
 
 app.options("/create-session", (req, res) => {
   res.status(204).end();

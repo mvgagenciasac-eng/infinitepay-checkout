@@ -267,13 +267,13 @@ const phoneWithDdi = cleanPhone.startsWith("55")
 
     const shopifyOrder = await createShopifyPendingOrder(checkoutData);
 
-    console.log("PEDIDO PENDENTE CRIADO NA SHOPIFY:", shopifyOrder.id);
+console.log("PEDIDO PENDENTE CRIADO NA SHOPIFY:", shopifyOrder.id);
 
-    res.json({
-      checkout_url: checkoutUrl,
-      order_nsu: orderNsu,
-      shopify_order_id: shopifyOrder.id
-    });
+res.json({
+  checkout_url: checkoutUrl,
+  order_nsu: orderNsu,
+  shopify_order_id: shopifyOrder.id
+});
   } catch (error) {
     console.error("Erro /api/create-payment:", error.response?.data || error.message);
     res.status(500).json({ error: error.response?.data || error.message });

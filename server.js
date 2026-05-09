@@ -749,7 +749,7 @@ async function goToInfinitePay() {
   name: document.getElementById("customer-name").value.trim()
 };
 
-    if (!customer.email || !customer.phone || !customer.name || !customer.cpf) {
+   if (!customer.email || !customer.phone || !customer.name) {
       alert("Preencha nome, e-mail, telefone e CPF para continuar.");
       return;
     }

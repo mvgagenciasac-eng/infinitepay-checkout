@@ -402,6 +402,55 @@ gtag('event', 'conversion', {
 <title>Checkout Forllini</title>
 
 <style>
+
+.checkout-explanation{
+  padding:44px;
+  background:#fff;
+  border-top:1px solid #e5e5e5;
+}
+
+.checkout-explanation h2{
+  text-align:center;
+  font-size:24px;
+  margin:0 0 28px;
+}
+
+.explanation-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.explanation-card{
+  background:#fafafa;
+  border:1px solid #e5e5e5;
+  border-radius:12px;
+  padding:20px;
+}
+
+.explanation-card strong{
+  display:block;
+  font-size:15px;
+  margin-bottom:10px;
+}
+
+.explanation-card span{
+  display:block;
+  font-size:14px;
+  line-height:1.55;
+  color:#444;
+}
+
+@media(max-width:900px){
+  .checkout-explanation{
+    padding:36px 18px;
+  }
+
+  .explanation-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#111;background:#fff}
 .header{text-align:center;padding:28px 20px 24px;border-bottom:1px solid #e5e5e5}

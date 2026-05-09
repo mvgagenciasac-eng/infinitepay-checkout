@@ -711,11 +711,10 @@ async function goToInfinitePay() {
   cpf: document.getElementById("customer-cpf").value.trim()
 };
 
-   if (!customer.email || !customer.phone || !customer.name) {
-      alert("Preencha nome, e-mail e telefone para continuar.");
-      return;
-    }
-
+   if (!customer.email || !customer.phone || !customer.name || !customer.cpf) {
+  alert("Preencha nome, e-mail, telefone e CPF para continuar.");
+  return;
+}
     const response = await fetch("/api/create-payment", {
       method: "POST",
       headers: {

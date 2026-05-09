@@ -744,18 +744,10 @@ document.getElementById("customer-cep").addEventListener("blur", (e) => {
 async function goToInfinitePay() {
   try {
     const customer = {
-      email: document.getElementById("customer-email").value.trim(),
-      phone: document.getElementById("customer-phone").value.trim(),
-      name: document.getElementById("customer-name").value.trim(),
-      cpf: document.getElementById("customer-cpf").value.trim(),
-      cep: document.getElementById("customer-cep").value.trim(),
-      address: document.getElementById("customer-address").value.trim(),
-      number: document.getElementById("customer-number").value.trim(),
-      complement: document.getElementById("customer-complement").value.trim(),
-      neighborhood: document.getElementById("customer-neighborhood").value.trim(),
-      city: document.getElementById("customer-city").value.trim(),
-      state: document.getElementById("customer-state").value
-    };
+  email: document.getElementById("customer-email").value.trim(),
+  phone: document.getElementById("customer-phone").value.trim(),
+  name: document.getElementById("customer-name").value.trim()
+};
 
     if (!customer.email || !customer.phone || !customer.name || !customer.cpf) {
       alert("Preencha nome, e-mail, telefone e CPF para continuar.");

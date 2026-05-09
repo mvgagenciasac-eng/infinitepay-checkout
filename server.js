@@ -484,12 +484,12 @@ h2{font-size:18px;margin:0 0 14px}
 <main class="checkout">
   <section class="left">
     <div class="steps">
-      <span>Carrinho</span>
-      <span>›</span>
-      <strong>Informações de Entrega</strong>
-      <span>›</span>
-      <span>Pagamento InfinitePay</span>
-    </div>
+  <span>Carrinho</span>
+  <span>›</span>
+  <strong>Dados para envio</strong>
+  <span>›</span>
+  <span>Pagamento seguro via InfinitePay</span>
+</div>
 
     <div class="section-title">
       <h2>Contato</h2>

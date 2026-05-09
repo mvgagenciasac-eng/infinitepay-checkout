@@ -179,7 +179,7 @@ app.post("/api/create-payment", async (req, res) => {
       return res.status(400).json({ error: "Carrinho vazio" });
     }
 
-    if (!customer?.email || !customer?.phone || !customer?.name) {
+    if (!customer?.email || !customer?.phone || !customer?.name || !customer?.cpf) {
       return res.status(400).json({
         error: "Dados obrigatórios ausentes"
       });

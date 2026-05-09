@@ -109,16 +109,11 @@ async function createShopifyPendingOrder(checkoutData) {
 
   const cleanPhone = String(customer.phone || "").replace(/\D/g, "");
   const shopifyPhone = cleanPhone.startsWith("55") ? `+${cleanPhone}` : `+55${cleanPhone}`;
-  const cleanCpf = String(customer.cpf || "").replace(/\D/g, "");
-  const cleanCep = String(customer.cep || "").replace(/\D/g, "");
 
   const fullName = customer.name || "Cliente";
   const nameParts = fullName.trim().split(" ");
   const firstName = nameParts.shift() || fullName;
   const lastName = nameParts.join(" ") || " ";
-
-  const address1 = `${customer.address || ""}${customer.number ? ", " + customer.number : ""}`;
-  const address2 = `${customer.neighborhood || ""}${customer.complement ? " - " + customer.complement : ""}`;
 
   const lineItems = items.map((item) => {
     if (item.variant_id) {
@@ -148,48 +143,13 @@ async function createShopifyPendingOrder(checkoutData) {
 
       tags: "InfinitePay, Checkout Próprio, Pagamento Pendente",
 
-      note: `Pedido iniciado no checkout próprio. Aguardando confirmação manual InfinitePay. NSU: ${checkoutData.order_nsu}`,
+      note: `Pedido iniciado no checkout próprio. Cliente será direcionado para pagamento seguro InfinitePay. NSU: ${checkoutData.order_nsu}`,
 
       line_items: lineItems,
 
-      shipping_address: {
-        first_name: firstName,
-        last_name: lastName,
-        name: fullName,
-        address1: address1,
-        address2: address2,
-        phone: shopifyPhone,
-        city: customer.city,
-        province: customer.state,
-        province_code: customer.state,
-        country: "Brazil",
-        country_code: "BR",
-        zip: cleanCep
-      },
-
-      billing_address: {
-        first_name: firstName,
-        last_name: lastName,
-        name: fullName,
-        address1: address1,
-        address2: address2,
-        phone: shopifyPhone,
-        city: customer.city,
-        province: customer.state,
-        province_code: customer.state,
-        country: "Brazil",
-        country_code: "BR",
-        zip: cleanCep
-      },
-
       note_attributes: [
-        { name: "CPF", value: cleanCpf },
+        { name: "Nome", value: fullName },
         { name: "Telefone", value: shopifyPhone },
-        { name: "Endereço", value: address1 },
-        { name: "Bairro", value: customer.neighborhood || "" },
-        { name: "Cidade", value: customer.city || "" },
-        { name: "Estado", value: customer.state || "" },
-        { name: "CEP", value: cleanCep },
         { name: "InfinitePay NSU", value: checkoutData.order_nsu },
         { name: "Status", value: "Aguardando pagamento InfinitePay" }
       ]

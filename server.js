@@ -596,6 +596,32 @@ h2{font-size:18px;margin:0 0 14px}
   </aside>
 </main>
 
+<section class="checkout-explanation">
+  <h2>Como funciona sua compra</h2>
+
+  <div class="explanation-grid">
+    <div class="explanation-card">
+      <strong>1. Escolha seu produto</strong>
+      <span>Selecione seu produto Forllini e avance para o checkout.</span>
+    </div>
+
+    <div class="explanation-card">
+      <strong>2. Informe seus dados</strong>
+      <span>Preencha seus dados de contato e endereço de envio.</span>
+    </div>
+
+    <div class="explanation-card">
+      <strong>3. Pedido registrado</strong>
+      <span>Recebemos seu pedido na loja e você segue para o pagamento seguro.</span>
+    </div>
+
+    <div class="explanation-card">
+      <strong>4. Pagamento InfinitePay</strong>
+      <span>Finalize com Pix ou cartão no ambiente seguro da InfinitePay.</span>
+    </div>
+  </div>
+</section>
+
 <section class="reviews">
   <h2 class="reviews-title">Avaliações de clientes</h2>
 

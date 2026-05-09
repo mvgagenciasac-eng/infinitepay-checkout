@@ -114,11 +114,20 @@ async function createShopifyPendingOrder(checkoutData) {
 
   const fullAddress = `${customer.address || ""}${customer.number ? ", " + customer.number : ""}`;
 
-  const lineItems = items.map((item) => ({
+  const lineItems = items.map((item) => {
+  if (item.variant_id) {
+    return {
+      variant_id: Number(item.variant_id),
+      quantity: Number(item.quantity || 1)
+    };
+  }
+
+  return {
     title: `${item.title || "Produto"}${item.variant_title ? " - " + item.variant_title : ""}`,
     quantity: Number(item.quantity || 1),
     price: Number(item.price || 0).toFixed(2)
-  }));
+  };
+});
 
   const orderPayload = {
     order: {

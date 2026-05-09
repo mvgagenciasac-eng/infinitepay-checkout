@@ -142,9 +142,10 @@ async function createShopifyPendingOrder(checkoutData) {
       line_items: lineItems,
 
       customer: {
-        first_name: customer.name,
-        email: customer.email
-      },
+  first_name: customer.name,
+  email: customer.email,
+  phone: shopifyPhone
+},
 
       shipping_address: {
         first_name: customer.name,

@@ -300,13 +300,16 @@ app.get("/checkout/:sessionId", async (req, res) => {
       total += itemTotal;
 
       return {
-        title: item.title || "Produto",
-        variant_title: item.variant_title || "Padrão",
-        quantity,
-        price,
-        image: item.image || "",
-        itemTotal
-      };
+  product_id: item.product_id || null,
+  variant_id: item.variant_id || null,
+  sku: item.sku || "",
+  title: item.title || "Produto",
+  variant_title: item.variant_title || "Padrão",
+  quantity,
+  price,
+  image: item.image || "",
+  itemTotal
+};
     });
 
     const itemsHtml = safeItems.map((item) => {

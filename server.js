@@ -519,6 +519,7 @@ h2{font-size:18px;margin:0 0 14px}
 
 <div class="field-group">
   <input class="field" id="customer-name" placeholder="Nome completo" />
+  <input class="field" id="customer-cpf" placeholder="CPF" />
 </div>
 
     <label class="checkbox-line">

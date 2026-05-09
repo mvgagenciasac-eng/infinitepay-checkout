@@ -150,6 +150,7 @@ async function createShopifyPendingOrder(checkoutData) {
       note_attributes: [
         { name: "Nome", value: fullName },
         { name: "Telefone", value: shopifyPhone },
+        { name: "CPF", value: String(customer.cpf || "").replace(/\D/g, "") },
         { name: "InfinitePay NSU", value: checkoutData.order_nsu },
         { name: "Status", value: "Aguardando pagamento InfinitePay" }
       ]

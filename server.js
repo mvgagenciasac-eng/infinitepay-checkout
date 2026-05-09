@@ -707,7 +707,8 @@ async function goToInfinitePay() {
     const customer = {
   email: document.getElementById("customer-email").value.trim(),
   phone: document.getElementById("customer-phone").value.trim(),
-  name: document.getElementById("customer-name").value.trim()
+  name: document.getElementById("customer-name").value.trim(),
+  cpf: document.getElementById("customer-cpf").value.trim()
 };
 
    if (!customer.email || !customer.phone || !customer.name) {

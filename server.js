@@ -492,7 +492,7 @@ h2{font-size:18px;margin:0 0 14px}
 </div>
 
     <div class="section-title">
-      <h2>Contato</h2>
+      <h2>Dados para pagamento e entrega</h2>
       <div class="login-text">Já possui uma conta? <a href="https://lojaforllini.com/account/login">Entrar</a></div>
     </div>
 
@@ -506,7 +506,7 @@ h2{font-size:18px;margin:0 0 14px}
       Quero receber novidades e ofertas exclusivas
     </label>
 
-    <h2>Entrega</h2>
+    <h2>Endereço de envio</h2>
 
     <div class="field-group">
       <select class="field" id="customer-country">
@@ -549,7 +549,7 @@ h2{font-size:18px;margin:0 0 14px}
     </label>
 
     <button class="pay-button" onclick="goToInfinitePay()">
-      <span>Ir para o pagamento</span>
+      <span>Continuar para pagamento seguro InfinitePay</span>
     </button>
 
     <div class="secure-note">

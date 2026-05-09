@@ -265,14 +265,21 @@ const phoneWithDdi = cleanPhone.startsWith("55")
 
     console.log("CHECKOUT SALVO:", orderNsu);
 
-    const shopifyOrder = await createShopifyPendingOrder(checkoutData);
+    let shopifyOrder = null;
 
-console.log("PEDIDO PENDENTE CRIADO NA SHOPIFY:", shopifyOrder.id);
+try {
+  shopifyOrder = await createShopifyPendingOrder(checkoutData);
+
+  console.log("PEDIDO PENDENTE CRIADO NA SHOPIFY:", shopifyOrder.id);
+} catch (shopifyError) {
+  console.error("ERRO AO CRIAR PEDIDO SHOPIFY:");
+  console.error(JSON.stringify(shopifyError.response?.data || shopifyError.message, null, 2));
+}
 
 res.json({
   checkout_url: checkoutUrl,
   order_nsu: orderNsu,
-  shopify_order_id: shopifyOrder.id
+  shopify_order_id: shopifyOrder ? shopifyOrder.id : null
 });
   } catch (error) {
     console.error("Erro /api/create-payment:", error.response?.data || error.message);

@@ -555,42 +555,11 @@ h2{font-size:18px;margin:0 0 14px}
       Quero receber novidades e ofertas exclusivas
     </label>
 
-    <h2>Endereço de envio</h2>
+   <h2>Dados do cliente</h2>
 
-    <div class="field-group">
-      <select class="field" id="customer-country">
-        <option>Brasil</option>
-      </select>
-
-      <div class="grid-2">
-        <input class="field" id="customer-name" placeholder="Nome completo" />
-        <input class="field" id="customer-cpf" placeholder="CPF" />
-      </div>
-
-      <input class="field" id="customer-cep" placeholder="CEP" />
-      <input class="field" id="customer-address" placeholder="Endereço" />
-
-      <div class="grid-2">
-        <input class="field" id="customer-number" placeholder="Número" />
-        <input class="field" id="customer-complement" placeholder="Complemento (opcional)" />
-      </div>
-
-      <input class="field" id="customer-neighborhood" placeholder="Bairro" />
-
-      <div class="grid-2">
-        <input class="field" id="customer-city" placeholder="Cidade" />
-        <select class="field" id="customer-state">
-          <option value="">Estado</option>
-          <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
-          <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
-          <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
-          <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
-          <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
-          <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
-          <option>SP</option><option>SE</option><option>TO</option>
-        </select>
-      </div>
-    </div>
+<div class="field-group">
+  <input class="field" id="customer-name" placeholder="Nome completo" />
+</div>
 
     <label class="checkbox-line">
       <input type="checkbox" />

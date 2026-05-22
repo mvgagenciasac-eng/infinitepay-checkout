@@ -364,6 +364,20 @@ gtag('event', 'conversion', {
 
 <style>
 
+.delivery-result{
+  background:#f7f7f7;
+  border:1px solid #e5e5e5;
+  border-radius:8px;
+  padding:14px 16px;
+  font-size:14px;
+  color:#333;
+  line-height:1.5;
+}
+
+.delivery-result strong{
+  display:block;
+  margin-bottom:4px;
+}
 .checkout-explanation{
   padding:44px;
   background:#fff;
@@ -521,6 +535,9 @@ h2{font-size:18px;margin:0 0 14px}
 <div class="field-group">
   <input class="field" id="customer-name" placeholder="Nome completo" />
   <input class="field" id="customer-cpf" placeholder="CPF" />
+  <input class="field" id="delivery-cep" placeholder="Consultar prazo pelo CEP" />
+
+<div id="delivery-result" class="delivery-result" style="display:none;"></div>  
 </div>
 
     <label class="checkbox-line">
@@ -701,6 +718,45 @@ async function buscarCEP(cep) {
 
 document.getElementById("customer-cep").addEventListener("blur", (e) => {
   buscarCEP(e.target.value);
+});
+
+async function consultarPrazoCEP(cep) {
+  cep = cep.replace(/\D/g, "");
+
+  const resultBox = document.getElementById("delivery-result");
+
+  if (!resultBox) return;
+
+  if (cep.length !== 8) {
+    resultBox.style.display = "none";
+    resultBox.innerHTML = "";
+    return;
+  }
+
+  try {
+    resultBox.style.display = "block";
+    resultBox.innerHTML = "Consultando prazo de entrega...";
+
+    const response = await fetch("https://viacep.com.br/ws/" + cep + "/json/");
+    const data = await response.json();
+
+    if (data.erro) {
+      resultBox.innerHTML = "CEP não encontrado. Verifique e tente novamente.";
+      return;
+    }
+
+    resultBox.innerHTML = `
+      <strong>Entrega disponível para ${data.localidade} - ${data.uf}</strong>
+      Prazo estimado: 8 a 12 dias úteis após a confirmação do pagamento.
+    `;
+  } catch (error) {
+    console.error("Erro ao consultar CEP:", error);
+    resultBox.innerHTML = "Não foi possível consultar o CEP agora.";
+  }
+}
+
+document.getElementById("delivery-cep").addEventListener("blur", (e) => {
+  consultarPrazoCEP(e.target.value);
 });
 
 async function goToInfinitePay() {

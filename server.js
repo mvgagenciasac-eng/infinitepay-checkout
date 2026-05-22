@@ -721,7 +721,7 @@ document.getElementById("customer-cep").addEventListener("blur", (e) => {
 });
 
 async function consultarPrazoCEP(cep) {
-  cep = cep.replace(/\D/g, "");
+  cep = String(cep || "").replace(/[^0-9]/g, "");
 
   const resultBox = document.getElementById("delivery-result");
 
@@ -733,10 +733,10 @@ async function consultarPrazoCEP(cep) {
     return;
   }
 
-  try {
-    resultBox.style.display = "block";
-    resultBox.innerHTML = "Consultando prazo de entrega...";
+  resultBox.style.display = "block";
+  resultBox.innerHTML = "Consultando prazo de entrega...";
 
+  try {
     const response = await fetch("https://viacep.com.br/ws/" + cep + "/json/");
     const data = await response.json();
 
@@ -746,8 +746,8 @@ async function consultarPrazoCEP(cep) {
     }
 
     resultBox.innerHTML =
-  "<strong>Entrega disponível para " + data.localidade + " - " + data.uf + "</strong>" +
-  "Prazo estimado: 8 a 12 dias úteis após a confirmação do pagamento.";
+      "<strong>Entrega disponível para " + data.localidade + " - " + data.uf + "</strong>" +
+      "<br>Prazo estimado: 8 a 12 dias úteis após a confirmação do pagamento.";
   } catch (error) {
     console.error("Erro ao consultar CEP:", error);
     resultBox.innerHTML = "Não foi possível consultar o CEP agora.";
@@ -757,19 +757,14 @@ async function consultarPrazoCEP(cep) {
 const deliveryCepInput = document.getElementById("delivery-cep");
 
 if (deliveryCepInput) {
-  deliveryCepInput.addEventListener("blur", (e) => {
+  deliveryCepInput.addEventListener("input", function(e) {
     consultarPrazoCEP(e.target.value);
   });
 
-  deliveryCepInput.addEventListener("input", (e) => {
-    const cep = e.target.value.replace(/\D/g, "");
-
-    if (cep.length === 8) {
-      consultarPrazoCEP(e.target.value);
-    }
+  deliveryCepInput.addEventListener("blur", function(e) {
+    consultarPrazoCEP(e.target.value);
   });
 }
-
 async function goToInfinitePay() {
   try {
     const customer = {

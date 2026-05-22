@@ -754,9 +754,21 @@ async function consultarPrazoCEP(cep) {
   }
 }
 
-document.getElementById("delivery-cep").addEventListener("blur", (e) => {
-  consultarPrazoCEP(e.target.value);
-});
+const deliveryCepInput = document.getElementById("delivery-cep");
+
+if (deliveryCepInput) {
+  deliveryCepInput.addEventListener("blur", (e) => {
+    consultarPrazoCEP(e.target.value);
+  });
+
+  deliveryCepInput.addEventListener("input", (e) => {
+    const cep = e.target.value.replace(/\D/g, "");
+
+    if (cep.length === 8) {
+      consultarPrazoCEP(e.target.value);
+    }
+  });
+}
 
 async function goToInfinitePay() {
   try {

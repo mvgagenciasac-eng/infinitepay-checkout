@@ -716,9 +716,6 @@ async function buscarCEP(cep) {
   }
 }
 
-document.getElementById("customer-cep").addEventListener("blur", (e) => {
-  buscarCEP(e.target.value);
-});
 
 async function consultarPrazoCEP(cep) {
   cep = String(cep || "").replace(/[^0-9]/g, "");

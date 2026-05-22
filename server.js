@@ -776,6 +776,14 @@ async function goToInfinitePay() {
   alert("Preencha nome, e-mail, telefone e CPF para continuar.");
   return;
 }
+
+if (typeof gtag === "function") {
+  gtag('event', 'conversion', {
+    'send_to': 'AW-18025145804/pV3TCPHW86YcEMzLh5ND',
+    'value': 0.0,
+    'currency': 'BRL'
+  });
+}
     const response = await fetch("/api/create-payment", {
       method: "POST",
       headers: {

@@ -742,9 +742,10 @@ async function consultarPrazoCEP(cep) {
       return;
     }
 
-    resultBox.innerHTML =
-      "<strong>Entrega disponível para " + data.localidade + " - " + data.uf + "</strong>" +
-      "<br>Prazo estimado: 8 a 12 dias úteis após a confirmação do pagamento.";
+resultBox.innerHTML =
+  "<strong style='color:#0a7d32;font-size:16px;'>🎉 Você ganhou Frete Grátis!</strong>" +
+  "<br><strong>Entrega disponível para " + data.localidade + " - " + data.uf + "</strong>" +
+  "<br>Prazo estimado: 8 a 12 dias úteis após a confirmação do pagamento.";
   } catch (error) {
     console.error("Erro ao consultar CEP:", error);
     resultBox.innerHTML = "Não foi possível consultar o CEP agora.";

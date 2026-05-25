@@ -779,7 +779,7 @@ async function goToInfinitePay() {
 
 if (typeof gtag === "function") {
   gtag('event', 'conversion', {
-    'send_to': 'AW-18025145804/pV3TCPHW86YcEMzLh5ND',
+    'send_to': 'AW-18025145804/7H80CLHY86YcEMzLh5ND',
     'value': 0.0,
     'currency': 'BRL'
   });

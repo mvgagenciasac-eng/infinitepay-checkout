@@ -662,6 +662,7 @@ h2{font-size:18px;margin:0 0 14px}
 
   <div>
     <h3>Institucional</h3>
+    <a href="https://lojaforllini.com/policies/legal-notice">Aviso Legal</a>
     <a href="https://lojaforllini.com/policies/privacy-policy">Política de Privacidade</a>
     <a href="https://lojaforllini.com/policies/refund-policy">Política de Devolução</a>
     <a href="https://lojaforllini.com/policies/shipping-policy">Política de Frete</a>

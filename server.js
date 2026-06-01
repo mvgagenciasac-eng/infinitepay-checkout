@@ -780,7 +780,7 @@ async function goToInfinitePay() {
 
 if (typeof gtag === "function") {
   gtag('event', 'conversion', {
-    'send_to': 'AW-18025145804/7H80CLHY86YcEMzLh5ND',
+    'send_to': 'AW-18203100782/-qxnCOWDnLccEO6M9edD',
     'value': 0.0,
     'currency': 'BRL'
   });
@@ -796,13 +796,32 @@ if (typeof gtag === "function") {
       })
     });
 
-    const data = await response.json();
+   const data = await response.json();
 
-    if (!data.checkout_url) {
-      console.error(data);
-      alert("Erro ao criar pagamento. Tente novamente.");
-      return;
-    }
+if (!data.checkout_url) {
+  console.error(data);
+  alert("Erro ao criar pagamento. Tente novamente.");
+  return;
+}
+
+let totalValue = 0;
+
+checkoutItems.forEach(item => {
+  totalValue += Number(item.price || 0) * Number(item.quantity || 1);
+});
+
+if (typeof gtag === "function") {
+  gtag('event', 'conversion', {
+    'send_to': 'AW-18025145804/7H80CLHY86YcEMzLh5ND',
+    'value': totalValue,
+    'currency': 'BRL',
+    'transaction_id': data.order_nsu || 'FORLLINI-' + Date.now()
+  });
+}
+
+setTimeout(function() {
+  window.location.href = data.checkout_url;
+}, 600);
 
     window.location.href = data.checkout_url;
   } catch (error) {

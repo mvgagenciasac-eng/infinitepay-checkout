@@ -811,12 +811,18 @@ checkoutItems.forEach(item => {
 });
 
 if (typeof gtag === "function") {
-  gtag('event', 'conversion', {
-    'send_to': 'AW-18025145804/7H80CLHY86YcEMzLh5ND',
-    'value': totalValue,
-    'currency': 'BRL',
-    'transaction_id': data.order_nsu || 'FORLLINI-' + Date.now()
-  });
+let totalValue = 0;
+
+checkoutItems.forEach(item => {
+  totalValue += Number(item.price || 0) * Number(item.quantity || 1);
+});
+
+gtag('event', 'conversion', {
+  'send_to': 'AW-18025145804/7H80CLHY86YcEMzLh5ND',
+  'value': totalValue,
+  'currency': 'BRL',
+  'transaction_id': data.order_nsu || 'FORLLINI-' + Date.now()
+});
 }
 
 setTimeout(function() {

@@ -350,10 +350,10 @@ gtag('js', new Date());
 
 gtag('config', 'G-4MVQ95824Y');
 
-gtag('config', 'AW-18025145804');
+gtag('config', 'AW-18203100782');
 
 gtag('event', 'conversion', {
-  'send_to': 'AW-18025145804/pV3TCPHW86YcEMzLh5ND',
+  'send_to': 'AW-18203100782/qxnCOWDnLccEO6M9edD',
   'value': 0.0,
   'currency': 'BRL'
 });
@@ -818,7 +818,7 @@ checkoutItems.forEach(item => {
 });
 
 gtag('event', 'conversion', {
-  'send_to': 'AW-18025145804/7H80CLHY86YcEMzLh5ND',
+  'send_to': 'AW-18203100782/qRhfCI_QmrccEO6M9edD',
   'value': totalValue,
   'currency': 'BRL',
   'transaction_id': data.order_nsu || 'FORLLINI-' + Date.now()

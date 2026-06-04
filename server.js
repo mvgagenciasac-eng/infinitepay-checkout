@@ -351,9 +351,17 @@ gtag('js', new Date());
 gtag('config', 'G-4MVQ95824Y');
 
 gtag('config', 'AW-18203100782');
+gtag('config', 'AW-18025145804');
 
 gtag('event', 'conversion', {
   'send_to': 'AW-18203100782/qxnCOWDnLccEO6M9edD',
+  'value': 0.0,
+  'currency': 'BRL'
+});
+
+/* Iniciar Checkout - Conta 2 */
+gtag('event', 'conversion', {
+  'send_to': 'AW-18025145804/pV3TCPHW86YcEMzLh5ND',
   'value': 0.0,
   'currency': 'BRL'
 });
@@ -822,6 +830,13 @@ gtag('event', 'conversion', {
   'value': totalValue,
   'currency': 'BRL',
   'transaction_id': data.order_nsu || 'FORLLINI-' + Date.now()
+});
+
+gtag('event', 'conversion', {
+  'send_to': 'AW-18025145804/7H80CLHY86YcEMzLh5ND',
+  'value': totalValue,
+  'currency': 'BRL',
+  'transaction_id': data.order_nsu
 });
 }
 

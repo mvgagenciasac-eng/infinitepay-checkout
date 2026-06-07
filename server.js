@@ -556,28 +556,7 @@ h2{font-size:18px;margin:0 0 14px}
     <button class="pay-button" onclick="goToInfinitePay()">
       <span>Continuar para pagamento seguro InfinitePay</span>
     </button>
-    
- <div style="
-  margin-top:12px;
-  padding:14px;
-  background:#fff8f8;
-  border-left:4px solid #dc2626;
-  border-radius:8px;
-  font-size:14px;
-  line-height:1.6;
-">
-  <div style="
-    color:#dc2626;
-    font-weight:700;
-    font-size:16px;
-    margin-bottom:6px;
-  ">
-    ⚠️ Aviso importante
-  </div>
-
-  As recentes instabilidades Infinitepay nos pagamentos por cartão de crédito já foram normalizadas. Caso ocorra alguma indisponibilidade momentânea durante a aprovação do cartão, recomendamos utilizar o <strong>Pix</strong>, que possui aprovação imediata, ou tentar novamente em alguns instantes.
-</div>
-    
+       
     <div class="secure-note">
        <img class="infinitepay-logo" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Logo_InfinitePay.svg" alt="InfinitePay" />
     </div>

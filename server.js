@@ -575,7 +575,7 @@ h2{font-size:18px;margin:0 0 14px}
     ⚠️ Aviso importante
   </div>
 
-  As recentes instabilidades nos pagamentos por cartão de crédito já foram normalizadas. Caso ocorra alguma indisponibilidade momentânea durante a aprovação do cartão, recomendamos utilizar o <strong>Pix</strong>, que possui aprovação imediata, ou tentar novamente em alguns instantes.
+  As recentes instabilidades Infinitepay nos pagamentos por cartão de crédito já foram normalizadas. Caso ocorra alguma indisponibilidade momentânea durante a aprovação do cartão, recomendamos utilizar o <strong>Pix</strong>, que possui aprovação imediata, ou tentar novamente em alguns instantes.
 </div>
     
     <div class="secure-note">
